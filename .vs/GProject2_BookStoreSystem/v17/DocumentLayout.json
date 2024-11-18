@@ -1,0 +1,71 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\megac\\OneDrive\\Desktop\\Data Structures Programs\\projects\\GProject2_BookStoreSystem\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{B805A420-1A0A-4501-84AF-FC7036E01BC1}|GProject2_BookStoreSystem.vcxproj|C:\\Users\\megac\\OneDrive\\Desktop\\Data Structures Programs\\projects\\GProject2_BookStoreSystem\\main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{B805A420-1A0A-4501-84AF-FC7036E01BC1}|GProject2_BookStoreSystem.vcxproj|solutionrelative:main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B805A420-1A0A-4501-84AF-FC7036E01BC1}|GProject2_BookStoreSystem.vcxproj|C:\\Users\\megac\\OneDrive\\Desktop\\Data Structures Programs\\projects\\GProject2_BookStoreSystem\\binarySearchTree.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{B805A420-1A0A-4501-84AF-FC7036E01BC1}|GProject2_BookStoreSystem.vcxproj|solutionrelative:binarySearchTree.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B805A420-1A0A-4501-84AF-FC7036E01BC1}|GProject2_BookStoreSystem.vcxproj|C:\\Users\\megac\\OneDrive\\Desktop\\Data Structures Programs\\projects\\GProject2_BookStoreSystem\\binaryTree.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{B805A420-1A0A-4501-84AF-FC7036E01BC1}|GProject2_BookStoreSystem.vcxproj|solutionrelative:binaryTree.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 1,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "binarySearchTree.h",
+              "DocumentMoniker": "C:\\Users\\megac\\OneDrive\\Desktop\\Data Structures Programs\\projects\\GProject2_BookStoreSystem\\binarySearchTree.h",
+              "RelativeDocumentMoniker": "binarySearchTree.h",
+              "ToolTip": "C:\\Users\\megac\\OneDrive\\Desktop\\Data Structures Programs\\projects\\GProject2_BookStoreSystem\\binarySearchTree.h",
+              "RelativeToolTip": "binarySearchTree.h",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2024-11-18T18:47:04.871Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "main.cpp",
+              "DocumentMoniker": "C:\\Users\\megac\\OneDrive\\Desktop\\Data Structures Programs\\projects\\GProject2_BookStoreSystem\\main.cpp",
+              "RelativeDocumentMoniker": "main.cpp",
+              "ToolTip": "C:\\Users\\megac\\OneDrive\\Desktop\\Data Structures Programs\\projects\\GProject2_BookStoreSystem\\main.cpp",
+              "RelativeToolTip": "main.cpp",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2024-11-18T18:46:48.415Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "binaryTree.h",
+              "DocumentMoniker": "C:\\Users\\megac\\OneDrive\\Desktop\\Data Structures Programs\\projects\\GProject2_BookStoreSystem\\binaryTree.h",
+              "RelativeDocumentMoniker": "binaryTree.h",
+              "ToolTip": "C:\\Users\\megac\\OneDrive\\Desktop\\Data Structures Programs\\projects\\GProject2_BookStoreSystem\\binaryTree.h",
+              "RelativeToolTip": "binaryTree.h",
+              "ViewState": "AgIAAFABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2024-11-18T18:46:41.901Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
