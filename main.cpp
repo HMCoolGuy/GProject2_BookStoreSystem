@@ -1,3 +1,11 @@
+/*
+Title: Online Bookstore Inventory System
+Authors: Hassan Mohamed. James Ruane
+Date: 12/09/24
+Description: Allows the user to manage and search through a 
+			 Bookstore Inventory System with the use of Binary
+			 Search Trees.
+*/
 #include <iostream>
 #include "binarySearchTree.h"
 
