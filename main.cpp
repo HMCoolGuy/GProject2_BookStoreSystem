@@ -53,7 +53,7 @@ int main() {
 		// Carry out a choice depending on what the user has selected
 		switch (userInt) { // TODO: Check if switch statements are allowed
 		case 1: // If user has selected 1
-			cout << "TODO: Allow user to view inventory" << endl;
+			cout << "TODO: Allow user to view inventory (aside from titles)" << endl;
 			bookInv.preorderTraversal();
 			cout << endl;
 			break;
@@ -83,7 +83,7 @@ int main() {
 			cin >> userInt;				 // Store the quantity of the book within userString
 
 			// TODO: insert other things BESIDE the title of the book into each node
-			bookInv.insert(userString[0]); 
+			bookInv.insert(userString[0]);
 
 			// Set userInt back to 0 so unexpected choice selection does not occur
 			userInt = 0; 
