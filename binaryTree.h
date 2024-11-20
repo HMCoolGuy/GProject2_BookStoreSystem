@@ -10,7 +10,12 @@ using namespace std;
 template <class elemType>
 struct nodeType
 {
-    elemType info;
+    elemType info; // This will be the title of the book
+    string author; // Author of the book
+    string genre;  // Genre of the book
+    string ISBN;   // ISBN identifier for the book
+    int quantity;  // The quantity of the book within the store
+
     nodeType<elemType>* lLink;
     nodeType<elemType>* rLink;
 };
@@ -229,7 +234,7 @@ void binaryTreeType<elemType>::inorder
     if (p != nullptr)
     {
         inorder(p->lLink);
-        cout << p->info << " ";
+        cout << p->info << " " << endl;
         inorder(p->rLink);
     }
 }
@@ -240,7 +245,7 @@ void binaryTreeType<elemType>::preorder
 {
     if (p != nullptr)
     {
-        cout << p->info << " ";
+        cout << p->info << " " << endl;
         preorder(p->lLink);
         preorder(p->rLink);
     }
