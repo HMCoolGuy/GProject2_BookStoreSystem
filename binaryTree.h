@@ -10,7 +10,14 @@ using namespace std;
 template <class elemType>
 struct nodeType
 {
+    // Each node in this binary search tree will represent a singular book in the inventory
+
     elemType info; // This will be the title of the book
+    string author; // Author of the book
+    string genre; // Genre of the book
+    string ISBN; // ISBN of the book
+    int quantity; // Quantity of book in the store
+
     nodeType<elemType>* lLink;
     nodeType<elemType>* rLink;
 };
@@ -70,7 +77,8 @@ public:
     //               the binary tree; otherwise, returns 
     //               false.
 
-    virtual void insert(const elemType& insertItem) = 0;
+    virtual void insert
+    (const elemType& insertTitle, const string& insertAuthor, const string& insertGenre, const string& insertISBN, const int& insertQuantity) = 0;
     //Function to insert insertItem in the binary tree.
     //Postcondition: If there is no node in the binary tree
     //               that has the same info as insertItem, a
@@ -228,8 +236,23 @@ void binaryTreeType<elemType>::inorder
 {
     if (p != nullptr)
     {
+        // Each node represents a book, so all nodes will be printed out alphabetically
+
+        // Go to the left node in the tree
         inorder(p->lLink);
-        cout << p->info << " " << endl;
+
+        // Print the book title
+        cout << p->info << " | ";
+        // Print the book author
+        cout << "Author(s): " << p->author << " | ";
+        // Print the book genre
+        cout << "Genre: " << p->genre << " | ";
+        // Print the book ISBN
+        cout << "ISBN: " << p->ISBN << " | ";
+        // Print the quantity of the book
+        cout << "Quantity: " << p->quantity << endl;
+
+        // Go to the right node in the tree
         inorder(p->rLink);
     }
 }

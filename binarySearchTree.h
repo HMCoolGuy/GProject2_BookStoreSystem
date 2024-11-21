@@ -18,7 +18,8 @@ public:
     //               the binary search tree; otherwise,
     //               returns false.
 
-    void insert(const elemType& insertItem);
+    void insert
+    (const elemType& insertTitle, const string& insertAuthor, const string& insertGenre, const string& insertISBN, const int& insertQuantity);
     //Function to insert insertItem in the binary search tree.
     //Postcondition: If there is no node in the binary search
     //               tree that has the same info as
@@ -73,7 +74,7 @@ bool bSearchTreeType<elemType>::search
 
 template <class elemType>
 void bSearchTreeType<elemType>::insert
-(const elemType& insertItem)
+(const elemType& insertTitle, const string& insertAuthor, const string& insertGenre, const string& insertISBN, const int& insertQuantity)
 {
     nodeType<elemType>* current; //pointer to traverse the tree
     nodeType<elemType>* trailCurrent = nullptr; //pointer
@@ -81,10 +82,18 @@ void bSearchTreeType<elemType>::insert
     nodeType<elemType>* newNode;  //pointer to create the node
 
     newNode = new nodeType<elemType>;
-    newNode->info = insertItem;
+
+    // Setup the information for the book
+    newNode->info = insertTitle;     // Set the new book's title
+    newNode->author = insertAuthor; // Set the new book's author
+    newNode->genre = insertGenre;   // Set the new book's genre
+    newNode->ISBN = insertISBN;     // Set the new book's ISBN
+    newNode->quantity = insertQuantity; // Set the quantity of this book
+
     newNode->lLink = nullptr;
     newNode->rLink = nullptr;
 
+    // Node is sorted alphabetically (Where A has highest root priority, and z is lowest priority)
     if (this->root == nullptr)
         this->root = newNode;
     else
@@ -95,20 +104,18 @@ void bSearchTreeType<elemType>::insert
         {
             trailCurrent = current;
 
-            if (current->info == insertItem)
+            if (current->ISBN == insertISBN) // ISBN's are compared to make sure no duplicate books are added
             {
-                cout << "The item to be inserted is already ";
-                cout << "in the tree -- duplicates are not "
-                    << "allowed." << endl;
+                cout << "This book is already in the inventory!" << endl;
                 return;
             }
-            else if (current->info > insertItem)
+            else if (current->info > insertTitle)
                 current = current->lLink;
             else
                 current = current->rLink;
         }//end while
 
-        if (trailCurrent->info > insertItem)
+        if (trailCurrent->info > insertTitle)
             trailCurrent->lLink = newNode;
         else
             trailCurrent->rLink = newNode;

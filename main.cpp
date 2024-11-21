@@ -16,9 +16,10 @@ int main() {
 
 	const string SEP_LINE = "-----------------------\n";
 
-	bSearchTreeType<string> bookInv; // TODO: Edit functions so that more information is gotten from nodes, figure out how to put mroe info into one node
-	int userInt = 0;
-	string userString[4];
+	bSearchTreeType<string> bookInv;	// Contains books as nodes in the binary search tree
+	int userInt = 0;					// Allows the user to input a number
+	string userString[4];				// Allows the user to input strings
+
 
 
 	cout << "** BOOKSTORE INVENTORY SYSTEM **" << endl;
@@ -53,9 +54,15 @@ int main() {
 		// Carry out a choice depending on what the user has selected
 		switch (userInt) { // TODO: Check if switch statements are allowed
 		case 1: // If user has selected 1
-			cout << "TODO: Allow user to view inventory (aside from titles)" << endl;
-			bookInv.inorderTraversal();
-			cout << endl;
+			if (bookInv.isEmpty()) {
+				cout << "There are no books in the inventory." << endl;
+			}
+			else {
+				cout << "CURRENT INVENTORY" << endl << "=================" << endl;
+				bookInv.inorderTraversal();
+				cout << endl;
+			}
+
 			break;
 		case 2: // If user has selected 2
 			cout << "TODO: Allow user to search for a specific book" << endl;
@@ -68,23 +75,26 @@ int main() {
 			getline(cin, userString[0]); // Store the title within index 0 of userString
 
 			cout << "Enter Book Author: ";
-			cin.ignore();
 			getline(cin, userString[1]); // Store the author within index 1 of userString
 
 			cout << "Enter Book Genre: ";
-			cin.ignore();
 			getline(cin, userString[2]); // Store the genre within index 2 of userString
 
 			cout << "Enter Book's ISBN: "; 
-			cin.ignore();
 			getline(cin, userString[3]); // Store the ISBN within index 3 of userString
 
 			cout << "Enter Book Quantity: ";
 			cin >> userInt;				 // Store the quantity of the book within userString
-			// TODO: ensure that input here is validated so program doesnt break
-
-			// TODO: insert other things BESIDE the title of the book into each node
-			bookInv.insert(userString[0]);
+			
+			// Ensure that the capacity is valid
+			while (userInt < 0) {
+				cout << "ERROR: Invalid Quantity (Must be positive)" << endl;
+				cout << "Enter Book Quantity: ";
+				cin >> userInt;				 // Store the quantity of the book within userString
+			}
+			
+			// Insert the title, author, genre, ISBN, and quantity into the node
+			bookInv.insert(userString[0], userString[1], userString[2], userString[3], userInt);
 
 			// Set userInt back to 0 so unexpected choice selection does not occur
 			userInt = 0; 
