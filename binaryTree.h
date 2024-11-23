@@ -12,7 +12,7 @@ struct nodeType
 {
     // Each node in this binary search tree will represent a singular book in the inventory
 
-    elemType info; // This will be the title of the book
+    string info; // This will be the title of the book
     string author; // Author of the book
     string genre; // Genre of the book
     string ISBN; // ISBN of the book
@@ -78,7 +78,7 @@ public:
     //               false.
 
     virtual void insert
-    (const elemType& insertTitle, const string& insertAuthor, const string& insertGenre, const string& insertISBN, const int& insertQuantity) = 0;
+    (const string& insertTitle, const string& insertAuthor, const string& insertGenre, const string& insertISBN, const int& insertQuantity) = 0;
     //Function to insert insertItem in the binary tree.
     //Postcondition: If there is no node in the binary tree
     //               that has the same info as insertItem, a

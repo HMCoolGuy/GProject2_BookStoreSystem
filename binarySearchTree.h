@@ -19,7 +19,7 @@ public:
     //               returns false.
 
     void insert
-    (const elemType& insertTitle, const string& insertAuthor, const string& insertGenre, const string& insertISBN, const int& insertQuantity);
+    (const string& insertTitle, const string& insertAuthor, const string& insertGenre, const string& insertISBN, const int& insertQuantity);
     //Function to insert insertItem in the binary search tree.
     //Postcondition: If there is no node in the binary search
     //               tree that has the same info as
@@ -74,7 +74,7 @@ bool bSearchTreeType<elemType>::search
 
 template <class elemType>
 void bSearchTreeType<elemType>::insert
-(const elemType& insertTitle, const string& insertAuthor, const string& insertGenre, const string& insertISBN, const int& insertQuantity)
+(const string& insertTitle, const string& insertAuthor, const string& insertGenre, const string& insertISBN, const int& insertQuantity)
 {
     nodeType<elemType>* current; //pointer to traverse the tree
     nodeType<elemType>* trailCurrent = nullptr; //pointer
@@ -109,7 +109,9 @@ void bSearchTreeType<elemType>::insert
                 cout << "This book is already in the inventory!" << endl;
                 return;
             }
-            else if (current->info > insertTitle)
+            // TODO: compare the letters from the string rather than the string themselves
+            // right now this does sort the strings properly, but places books starting with lowercase letters after uppercase Z.
+            else if (current->info > insertTitle) 
                 current = current->lLink;
             else
                 current = current->rLink;
