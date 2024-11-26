@@ -43,6 +43,10 @@ private:
     //deleted from the binary search tree.
     //Postcondition: The node to which p points is deleted
     //               from the binary search tree.
+
+    bool checkLesser(string str1, string str2);
+    // Function to check for which string is lesser than the other
+    // for alphabetical sorting purposes.
 };
 
 
@@ -83,8 +87,7 @@ void bSearchTreeType<elemType>::insert
     nodeType<elemType>* newNode;  //pointer to create the node
 
     newNode = new nodeType<elemType>;
-    string upperString = insertTitle;
-    int currentChar = 0;
+
 
     // Setup the information for the book
     newNode->info = insertTitle;     // Set the new book's title
@@ -96,10 +99,10 @@ void bSearchTreeType<elemType>::insert
     newNode->lLink = nullptr;
     newNode->rLink = nullptr;
 
+    bool newLesser = true;
+
     // Create an uppercase version of the string for alphabetical sorting purposes
-    for (int i = 0; i < insertTitle.length(); i++) {
-        upperString[i] = toupper(insertTitle[i]); // Store each character of the string in upperString as an uppercase letter
-    }
+
 
     // Node is sorted alphabetically (Where A has highest root priority, and z is lowest priority)
     if (this->root == nullptr)
@@ -119,13 +122,18 @@ void bSearchTreeType<elemType>::insert
             }
             // TODO: lowercase a and uppercase A are now put together, but in no particular order. 
             // unsure if lowercase should come before uppercase
-            else if (toupper(current->info[currentChar]) > upperString[currentChar])
+            
+
+            // Iterate through each character of both the string
+
+            
+            if (checkLesser(insertTitle, current->info))
                 current = current->lLink;
             else
                 current = current->rLink;
         }//end while
 
-        if (toupper(trailCurrent->info[currentChar]) > upperString[currentChar])
+        if (checkLesser(insertTitle, current->info))
             trailCurrent->lLink = newNode;
         else
             trailCurrent->rLink = newNode;
@@ -232,5 +240,38 @@ void bSearchTreeType<elemType>::deleteFromTree
         delete current;
     }//end else
 } //end deleteFromTree
+
+template <typename T>
+bool bSearchTreeType<T>::checkLesser(string str1, string str2) {
+
+    int shortestLength = 0; // The length of the shorter string within parameters
+
+    // Set shortestLength to the length of the shortest string
+    if (str1.length() < str2.length()) {
+        shortestLength = str1.length();
+    }
+    else {
+        shortestLength = str2.length();
+    }
+
+    // Check the both strings for a character mismatch
+    for (int i = 0; i < shortestLength; i++) { // Make sure that each character is the same
+        if (str1[i] != str2[i]) { 
+            
+            // If there is a mismatch, check to see if both are the same letter
+            if (tolower(str1[i]) == tolower(str2[i])) { 
+                // Check if the letter in str1 is upper or lowercase, and insert the string with the lowercase letter first
+                return str1[i] < str2[i]; 
+            }
+            else {
+                // Compare characters' hex values to see which is higher, and should go first
+                return str1[i] > str2[i]; 
+            }
+        }
+    }
+
+    // By this point, the strings have the same characters, so length's are compared to put shortest first
+    return str1.length() < str2.length();
+}
 
 #endif
