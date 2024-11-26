@@ -3,6 +3,7 @@
 #ifndef H_binarySearchTree
 #define H_binarySearchTree
 #include <iostream>
+#include <string>
 #include "binaryTree.h"
 
 using namespace std;
@@ -82,6 +83,8 @@ void bSearchTreeType<elemType>::insert
     nodeType<elemType>* newNode;  //pointer to create the node
 
     newNode = new nodeType<elemType>;
+    string upperString = insertTitle;
+    int currentChar = 0;
 
     // Setup the information for the book
     newNode->info = insertTitle;     // Set the new book's title
@@ -92,6 +95,11 @@ void bSearchTreeType<elemType>::insert
 
     newNode->lLink = nullptr;
     newNode->rLink = nullptr;
+
+    // Create an uppercase version of the string for alphabetical sorting purposes
+    for (int i = 0; i < insertTitle.length(); i++) {
+        upperString[i] = toupper(insertTitle[i]); // Store each character of the string in upperString as an uppercase letter
+    }
 
     // Node is sorted alphabetically (Where A has highest root priority, and z is lowest priority)
     if (this->root == nullptr)
@@ -109,15 +117,15 @@ void bSearchTreeType<elemType>::insert
                 cout << "This book is already in the inventory!" << endl;
                 return;
             }
-            // TODO: compare the letters from the string rather than the string themselves
-            // right now this does sort the strings properly, but places books starting with lowercase letters after uppercase Z.
-            else if (current->info > insertTitle) 
+            // TODO: lowercase a and uppercase A are now put together, but in no particular order. 
+            // unsure if lowercase should come before uppercase
+            else if (toupper(current->info[currentChar]) > upperString[currentChar])
                 current = current->lLink;
             else
                 current = current->rLink;
         }//end while
 
-        if (trailCurrent->info > insertTitle)
+        if (toupper(trailCurrent->info[currentChar]) > upperString[currentChar])
             trailCurrent->lLink = newNode;
         else
             trailCurrent->rLink = newNode;
