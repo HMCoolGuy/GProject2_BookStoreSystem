@@ -106,6 +106,10 @@ public:
 protected:
     nodeType<elemType>* root;
 
+    void printBook(nodeType<elemType>* p) const;
+    // Function to print a given book node's information
+    // (Title, Author, Genre, ISBN, and Quantity).
+
 private:
     void copyTree(nodeType<elemType>*& copiedTreeRoot,
         nodeType<elemType>* otherTreeRoot);
@@ -162,10 +166,6 @@ private:
     //the binary tree to which p points 
     //Postcondition: The number of leaves in the binary 
     //               tree to which p points is returned.
-
-    void printBook(nodeType<elemType>* p) const;
-    // Function to print a given book node's information
-    // (Title, Author, Genre, ISBN, and Quantity).
 
 };
 

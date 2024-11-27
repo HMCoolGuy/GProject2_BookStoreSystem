@@ -19,7 +19,6 @@ int main() {
 	bSearchTreeType<string> bookInv;	// Contains books as nodes in the binary search tree
 	int userInt = 0;					// Allows the user to input a number
 	string userString[4];				// Allows the user to input strings
-	
 
 	cout << "** BOOKSTORE INVENTORY SYSTEM **" << endl;
 	// Begin while loop that will only exit if the user chooses to do so
