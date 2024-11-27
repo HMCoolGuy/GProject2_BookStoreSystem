@@ -95,14 +95,8 @@ void bSearchTreeType<elemType>::insert
     newNode->genre = insertGenre;   // Set the new book's genre
     newNode->ISBN = insertISBN;     // Set the new book's ISBN
     newNode->quantity = insertQuantity; // Set the quantity of this book
-
     newNode->lLink = nullptr;
     newNode->rLink = nullptr;
-
-    bool newLesser = true;
-
-    // Create an uppercase version of the string for alphabetical sorting purposes
-
 
     // Node is sorted alphabetically (Where A has highest root priority, and z is lowest priority)
     if (this->root == nullptr)
@@ -122,21 +116,27 @@ void bSearchTreeType<elemType>::insert
             }
             // TODO: lowercase a and uppercase A are now put together, but in no particular order. 
             // unsure if lowercase should come before uppercase
-            
 
             // Iterate through each character of both the string
-
-            
-            if (checkLesser(insertTitle, current->info))
+            if (checkLesser(current->info, insertTitle)) { // current node string < insertTitle
+                // If character of mismatch goes first, then traverse to the left
                 current = current->lLink;
-            else
+            }
+            else {
+                // If character goes afterward, traverse right
                 current = current->rLink;
+            }
         }//end while
 
-        if (checkLesser(insertTitle, current->info))
+        if (checkLesser(trailCurrent->info, insertTitle)) { // last node string < insertTitle
+            // if character of mismatch goes first, point lLink of previous node to the new node
             trailCurrent->lLink = newNode;
-        else
+        }
+        else {
+            // if the character goes afterward, point rLink of previous node to the new node
             trailCurrent->rLink = newNode;
+        }
+
     }
 }//end insert
 
@@ -243,8 +243,10 @@ void bSearchTreeType<elemType>::deleteFromTree
 
 template <typename T>
 bool bSearchTreeType<T>::checkLesser(string str1, string str2) {
+    // True = lLink
+    // False = rLink
 
-    int shortestLength = 0; // The length of the shorter string within parameters
+    int shortestLength = 0; // Length of the shortest string
 
     // Set shortestLength to the length of the shortest string
     if (str1.length() < str2.length()) {
@@ -255,23 +257,24 @@ bool bSearchTreeType<T>::checkLesser(string str1, string str2) {
     }
 
     // Check the both strings for a character mismatch
+ 
+    // TODO: Uppercase letters are sorted correctly, but if lowercase letters (such as c) are inserted after
+    // Upper case letters (A and Z), c is placed at the end.
     for (int i = 0; i < shortestLength; i++) { // Make sure that each character is the same
-        if (str1[i] != str2[i]) { 
-            
+        if (str1[i] != str2[i]) {
             // If there is a mismatch, check to see if both are the same letter
-            if (tolower(str1[i]) == tolower(str2[i])) { 
-                // Check if the letter in str1 is upper or lowercase, and insert the string with the lowercase letter first
-                return str1[i] < str2[i]; 
+            if (tolower(str1[i]) == tolower(str2[i])) {
+                // if str1 character is lowercase, it goes first. otherwise, it goes afterward
+                return str1[i] < str2[i];
             }
             else {
-                // Compare characters' hex values to see which is higher, and should go first
-                return str1[i] > str2[i]; 
+                // if str1 character is higher (in hex), it , otherwise pick right node
+
+                return str1[i] > str2[i];
             }
         }
     }
-
     // By this point, the strings have the same characters, so length's are compared to put shortest first
-    return str1.length() < str2.length();
+    return str1.length() > str2.length();
 }
-
 #endif

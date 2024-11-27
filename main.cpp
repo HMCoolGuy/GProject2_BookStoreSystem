@@ -92,7 +92,7 @@ int main() {
 				cout << "Enter Book Quantity: ";
 				cin >> userInt;				 // Store the quantity of the book within userString
 			}
-			
+
 			// Insert the title, author, genre, ISBN, and quantity into the node
 			bookInv.insert(userString[0], userString[1], userString[2], userString[3], userInt);
 
