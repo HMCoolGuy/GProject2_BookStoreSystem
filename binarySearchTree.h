@@ -114,26 +114,25 @@ void bSearchTreeType<elemType>::insert
                 cout << "This book is already in the inventory!" << endl;
                 return;
             }
-            // TODO: lowercase a and uppercase A are now put together, but in no particular order. 
-            // unsure if lowercase should come before uppercase
 
-            // Iterate through each character of both the string
-            if (checkLesser(current->info, insertTitle)) { // current node string < insertTitle
-                // If character of mismatch goes first, then traverse to the left
-                current = current->lLink;
+            // Iterate through each character of both the string to determine order
+            if (checkLesser(current->info, insertTitle)) {
+                // If mismatching insert character is lesser than current string character
+                current = current->lLink; 
             }
             else {
-                // If character goes afterward, traverse right
+                // If mismatching insert character is greater than current string character
                 current = current->rLink;
             }
         }//end while
 
-        if (checkLesser(trailCurrent->info, insertTitle)) { // last node string < insertTitle
-            // if character of mismatch goes first, point lLink of previous node to the new node
+        // Determine which direction the previous node should point to for the new node
+        if (checkLesser(trailCurrent->info, insertTitle)) { 
+            // If character of insert string goes before previous string's character, point lLink of previous node to the new node
             trailCurrent->lLink = newNode;
         }
         else {
-            // if the character goes afterward, point rLink of previous node to the new node
+            // If character of insert string goes after previous string's character, point rLink of previous node to the new node
             trailCurrent->rLink = newNode;
         }
 
@@ -257,24 +256,21 @@ bool bSearchTreeType<T>::checkLesser(string str1, string str2) {
     }
 
     // Check the both strings for a character mismatch
- 
-    // TODO: Uppercase letters are sorted correctly, but if lowercase letters (such as c) are inserted after
-    // Upper case letters (A and Z), c is placed at the end.
-    for (int i = 0; i < shortestLength; i++) { // Make sure that each character is the same
-        if (str1[i] != str2[i]) {
-            // If there is a mismatch, check to see if both are the same letter
-            if (tolower(str1[i]) == tolower(str2[i])) {
-                // if str1 character is lowercase, it goes first. otherwise, it goes afterward
-                return str1[i] < str2[i];
-            }
-            else {
-                // if str1 character is higher (in hex), it , otherwise pick right node
+    for (int i = 0; i < shortestLength; i++) {
 
-                return str1[i] > str2[i];
-            }
+        // Check if the string characters are the same (as lowercase)
+        if (tolower(str1[i]) != tolower(str2[i])) {
+            // Determine which string character is greater 
+            return tolower(str1[i]) > tolower(str2[i]);  // (lowercase is higher than uppercase in hex)
+        }
+        // Check if the string characters are the same
+        else if (str1[i] != str2[i]) {
+            // Determine which character is lesser
+            return str1[i] < str2[i];
         }
     }
-    // By this point, the strings have the same characters, so length's are compared to put shortest first
+    
+    // By this point, the strings have the same characters, so length's are compared. Shorter string goes first.
     return str1.length() > str2.length();
 }
 #endif
