@@ -114,7 +114,7 @@ void bSearchTreeType<elemType>::insert
                 cout << "This book is already in the inventory!" << endl;
                 return;
             }
-
+            
             // Iterate through each character of both the string to determine order
             if (checkLesser(current->info, insertTitle)) {
                 // If mismatching insert character is lesser than current string character

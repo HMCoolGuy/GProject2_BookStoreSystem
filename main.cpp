@@ -12,10 +12,8 @@ Description: Allows the user to manage and search through a
 
 using namespace std;
 
-// Hello There.
 int main() {
-	// test
-
+	
 	const string SEP_LINE = "-----------------------\n";
 
 	bSearchTreeType<string> bookInv;	// Contains books as nodes in the binary search tree
@@ -61,6 +59,7 @@ int main() {
 			else {
 				cout << "CURRENT INVENTORY" << endl << "=================" << endl;
 				bookInv.inorderTraversal();
+				
 				cout << endl;
 			}
 

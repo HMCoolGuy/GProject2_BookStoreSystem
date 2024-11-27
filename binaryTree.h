@@ -162,6 +162,11 @@ private:
     //the binary tree to which p points 
     //Postcondition: The number of leaves in the binary 
     //               tree to which p points is returned.
+
+    void printBook(nodeType<elemType>* p) const;
+    // Function to print a given book node's information
+    // (Title, Author, Genre, ISBN, and Quantity).
+
 };
 
 //Definition of member functions
@@ -240,18 +245,8 @@ void binaryTreeType<elemType>::inorder
 
         // Go to the left node in the tree
         inorder(p->lLink);
-
-        // Print the book title
-        cout << p->info << " | ";
-        // Print the book author
-        cout << "Author(s): " << p->author << " | ";
-        // Print the book genre
-        cout << "Genre: " << p->genre << " | ";
-        // Print the book ISBN
-        cout << "ISBN: " << p->ISBN << " | ";
-        // Print the quantity of the book
-        cout << "Quantity: " << p->quantity << endl;
-
+        // Print the book
+        printBook(p);
         // Go to the right node in the tree
         inorder(p->rLink);
     }
@@ -376,6 +371,20 @@ int binaryTreeType<elemType>::leavesCount(nodeType<elemType>* p) const
             return 1;
         else
             return leavesCount(p->lLink) + leavesCount(p->rLink);
+}
+
+template<class elemType>
+void binaryTreeType<elemType>::printBook(nodeType<elemType>* p) const {
+    // Print the book title
+    cout << p->info << " | ";
+    // Print the book author
+    cout << "Author(s): " << p->author << " | ";
+    // Print the book genre
+    cout << "Genre: " << p->genre << " | ";
+    // Print the book ISBN
+    cout << "ISBN: " << p->ISBN << " | ";
+    // Print the quantity of the book
+    cout << "Quantity: " << p->quantity << endl;
 }
 
 #endif
