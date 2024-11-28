@@ -100,7 +100,24 @@ int main() {
 
 			break;
 		case 4: // If user has selected 4
-			cout << "TODO: Update an existing book (searching for the book through the books ISBN)" << endl;
+			cout << "Enter the book with the ISBN to be updated: ";
+			getline(cin, userString[3]); // Store the ISBN into index 3 of userString
+			cout << "Enter the new book quantity: "
+			cin >> userInt; // Store the the new book quantity into userInt
+
+			// Ensure that the capacity is valid
+			while (userInt < 0) {
+				cout << "ERROR: Invalid Quantity (Must be positive)" << endl;
+				cout << "Enter Book Quantity: ";
+				cin >> userInt;				 // Store the quantity of the book within userString
+			}
+			
+			// Update the book with its new quantity.
+			bookInv.updateQuantity(userString[3], userInt);
+			
+			// Set userInt back to 0 to avoid unexpected choice selection.
+			userInt = 0;
+			
 			break;
 		case 5: // If user has selected 5
 			cout << "TODO: Search for an existing book (through the books ISBN)" << endl;
