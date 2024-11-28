@@ -19,6 +19,9 @@ public:
     //               the binary search tree; otherwise,
     //               returns false.
 
+    nodeType<elemType>* searchBookISBN(const string& bookISBN = "") const;
+    // A function to search through the tree that contains the located IBSN.
+
     void insert
     (const string& insertTitle, const string& insertAuthor, const string& insertGenre, const string& insertISBN, const int& insertQuantity);
     //Function to insert insertItem in the binary search tree.
@@ -37,6 +40,9 @@ public:
     //               is not in the binary tree, an appropriate
     //               message is printed.
 
+    void updateQuantity(const string& bookISBN, const int& newQuantity);
+    // A function to update the book's quantity (searching through the book's ISBN).
+
 private:
     void deleteFromTree(nodeType<elemType>*& p);
     //Function to delete the node to which p points is
@@ -47,6 +53,9 @@ private:
     bool checkLesser(string str1, string str2);
     // Function to check for which string is lesser than the other
     // for alphabetical sorting purposes.
+
+    nodeType<elemType>* searchByISBN (const elemType& searchItem) const;
+    // A helper function used to navigate where the located ISBN is.
 };
 
 
@@ -76,6 +85,31 @@ bool bSearchTreeType<elemType>::search
 
     return found;
 }//end search
+
+template <class elemType>
+void bSearchTreeType<elemType>::updateQuantity(const string& bookISBN, const int& newQuantity) { // A function to update the book's quantity.
+		nodeType<elemType>* specificBook = searchBookISBN(bookISBN); // Assign specificBook with a book that contains the same ISBN as bookISBN 
+
+		if(book != nullptr){ // Check if the book exists or not.
+			book->quantity = newQuantity;
+			cout << "Updating book\'s quantity successfully." << endl;
+		}
+		else{
+			cout << "The book ISBN: " << bookISBN << " does not exist." << endl;
+		}
+} // end updateQuantity
+
+template <class elemType>
+nodeType<elemType>* bSearchTreeType<elemType>::searchBookISBN(const string& bookISBN = "") const{ // Search the tree that contains the located IBSN.
+		nodeType<elemType>* foundISBN;
+
+		if(bookISBN.length() == 10 || bookISBN.length() == 13){ // Check if the length of the ISBN is valid.
+			// Call the helper function searchByISBN
+			foundISBN = searchByISBN(bookISBN);
+			return foundISBN;
+		}
+		return nullptr;
+} // end searchBookISBN
 
 template <class elemType>
 void bSearchTreeType<elemType>::insert
@@ -240,6 +274,8 @@ void bSearchTreeType<elemType>::deleteFromTree
     }//end else
 } //end deleteFromTree
 
+
+
 template <typename T>
 bool bSearchTreeType<T>::checkLesser(string str1, string str2) {
     // True = lLink
@@ -273,4 +309,29 @@ bool bSearchTreeType<T>::checkLesser(string str1, string str2) {
     // By this point, the strings have the same characters, so length's are compared. Shorter string goes first.
     return str1.length() > str2.length();
 }
+
+template <class elemType>
+nodeType<elemType>* bSearchTreeType<elemType>::searchByISBN (const elemType& searchItem) const { // A helper function used to navigate where the located ISBN is.
+	nodeType<elemType>* current;
+	bool found = false;
+
+	if (this->root == nullptr) // check if the root is empty
+		current = nullptr;
+	else
+	{
+		current = this->root;
+
+		while (current != nullptr && !found){ // Run until either the the located ISBN is found or the 
+			if (current->ISBN == searchItem)
+				found = true;
+			else if (current->ISBN > searchItem)
+				current = current->lLink;
+			else
+				current = current->rLink;
+		}//end while
+	}//end else
+
+	return current;
+}//end searchByISBN
+
 #endif
