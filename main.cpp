@@ -28,10 +28,10 @@ int main() {
 
 		// Print out options for user
 		cout << "1) View inventory" << endl;
-		cout << "2) Search for a book" << endl;
+		cout << "2) Search for an existing book" << endl;
 		cout << "3) Add a book" << endl;
 		cout << "4) Update an existing book" << endl;
-		cout << "5) Search for an existing book" << endl;
+		cout << "5) Analyze Inventory" << endl;
 		cout << "6) Exit Program" << endl;
 		// TODO: Add the rest of the functions for analyzing the inventory
 		// TODO: Add the rest of the functions for processing book sales, updating inventory quantities, and managing customer orders.
@@ -64,9 +64,9 @@ int main() {
 
 			break;
 		case 2: // If user has selected 2
-			cout << "TODO: Allow user to search for a specific book" << endl;
-
+			cout << "TODO: Allow user to search for a specific book (through isbn, title, genre, or author)" << endl;
 			break;
+
 		case 3: // If user has selected 3
 
 			cout << "Enter Title of Book: ";
@@ -81,14 +81,22 @@ int main() {
 
 			cout << "Enter Book's ISBN: "; 
 			getline(cin, userString[3]); // Store the ISBN within index 3 of userString
+			
+			while (userString[3].length() != 10 && userString[3].length() != 13) { // Check if the length of the ISBN is valid.
+				// Call the helper function searchByISBN
+				cout << "ERROR: Invalid ISBN (Must be 10 or 13 characters)" << endl;
+				cout << "Enter Book's ISBN: ";
+				getline(cin, userString[3]); // Store the ISBN within index 3 of userString
+			}
 
 			cout << "Enter Book Quantity: ";
 			cin >> userInt;				 // Store the quantity of the book within userString
 			
 			// Ensure that the capacity is valid
 			while (userInt < 0) {
-				cout << "ERROR: Invalid Quantity (Must be positive)" << endl;
+				cout << "ERROR: Invalid Quantity (Must be a positive integer)" << endl;
 				cout << "Enter Book Quantity: ";
+				cin.ignore();
 				cin >> userInt;				 // Store the quantity of the book within userString
 			}
 
@@ -100,27 +108,43 @@ int main() {
 
 			break;
 		case 4: // If user has selected 4
-			cout << "Enter the book with the ISBN to be updated: ";
-			getline(cin, userString[3]); // Store the ISBN into index 3 of userString
-			cout << "Enter the new book quantity: "
-			cin >> userInt; // Store the the new book quantity into userInt
 
-			// Ensure that the capacity is valid
-			while (userInt < 0) {
-				cout << "ERROR: Invalid Quantity (Must be positive)" << endl;
-				cout << "Enter Book Quantity: ";
-				cin >> userInt;				 // Store the quantity of the book within userString
+			// Check if inventory is empty
+			if (bookInv.isEmpty()) {
+				cout << "There are no books in the inventory." << endl;
 			}
-			
-			// Update the book with its new quantity.
-			bookInv.updateQuantity(userString[3], userInt);
-			
-			// Set userInt back to 0 to avoid unexpected choice selection.
-			userInt = 0;
-			
+			else {
+				// Get the books isbn
+				cout << "Enter the book with the ISBN to be updated: ";
+				cin.ignore();
+				getline(cin, userString[3]); // Store the ISBN into index 3 of userString
+
+				while (userString[3].length() != 10 && userString[3].length() != 13) { // Check if the length of the ISBN is valid.
+					// Call the helper function searchByISBN
+					cout << "ERROR: Invalid ISBN (Must be 10 or 13 characters)" << endl;
+					cout << "Enter Book's ISBN: ";
+					getline(cin, userString[3]); // Store the ISBN within index 3 of userString
+				}
+
+				cout << "Enter the new book quantity: ";
+				cin >> userInt; // Store the the new book quantity into userInt
+
+				// Ensure that the capacity is valid
+				while (userInt < 0) {
+					cout << "ERROR: Invalid Quantity (Must be a positive integer)" << endl;
+					cout << "Enter Book Quantity: ";
+					cin >> userInt;				 // Store the quantity of the book within userString
+				}
+
+				// Update the book with its new quantity.
+				bookInv.updateQuantity(userString[3], userInt);
+
+				// Set userInt back to 0 to avoid unexpected choice selection.
+				userInt = 0;
+			}
 			break;
 		case 5: // If user has selected 5
-			cout << "TODO: Search for an existing book (through the books ISBN)" << endl;
+			cout << "TODO: Put inventory analysis functions here (identifying popular gneres, tracking book sales, and managing stock levels)" << endl;
 			break;
 		}
 		// If user selects 6, program stops

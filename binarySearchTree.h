@@ -88,28 +88,16 @@ bool bSearchTreeType<elemType>::search
 
 template <class elemType>
 void bSearchTreeType<elemType>::updateQuantity(const string& bookISBN, const int& newQuantity) { // A function to update the book's quantity.
-		nodeType<elemType>* specificBook = searchBookISBN(bookISBN); // Assign specificBook with a book that contains the same ISBN as bookISBN 
+		nodeType<elemType>* specificBook = searchByISBN(bookISBN); // Assign specificBook with a book that contains the same ISBN as bookISBN 
 
-		if(book != nullptr){ // Check if the book exists or not.
-			book->quantity = newQuantity;
-			cout << "Updating book\'s quantity successfully." << endl;
+		if (specificBook != nullptr) { // Check if the book exists or not.
+			specificBook->quantity = newQuantity;
+			cout << "Updated book\'s quantity successfully." << endl;
 		}
 		else{
-			cout << "The book ISBN: " << bookISBN << " does not exist." << endl;
+			cout << "\nBook with ISBN: " << bookISBN << "\ndoes not exist." << endl;
 		}
 } // end updateQuantity
-
-template <class elemType>
-nodeType<elemType>* bSearchTreeType<elemType>::searchBookISBN(const string& bookISBN = "") const{ // Search the tree that contains the located IBSN.
-		nodeType<elemType>* foundISBN;
-
-		if(bookISBN.length() == 10 || bookISBN.length() == 13){ // Check if the length of the ISBN is valid.
-			// Call the helper function searchByISBN
-			foundISBN = searchByISBN(bookISBN);
-			return foundISBN;
-		}
-		return nullptr;
-} // end searchBookISBN
 
 template <class elemType>
 void bSearchTreeType<elemType>::insert
@@ -169,8 +157,10 @@ void bSearchTreeType<elemType>::insert
             // If character of insert string goes after previous string's character, point rLink of previous node to the new node
             trailCurrent->rLink = newNode;
         }
-
     }
+
+    cout << "Book added!" << endl;
+
 }//end insert
 
 template <class elemType>
