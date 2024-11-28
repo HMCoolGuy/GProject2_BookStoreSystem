@@ -339,7 +339,7 @@ nodeType<elemType>* bSearchTreeType<elemType>::searchByISBN (const elemType& sea
 	{
 		current = this->root;
 
-		while (current != nullptr && !found){ // Run until either the the located ISBN is found or the 
+		while (current != nullptr && !found){ // Run until either the located ISBN is found or the it reaches the end of the list.
 			if (current->ISBN == searchItem)
 				found = true;
 			else if (current->ISBN > searchItem)
