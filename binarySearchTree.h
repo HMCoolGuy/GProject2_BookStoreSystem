@@ -19,8 +19,6 @@ public:
     //               the binary search tree; otherwise,
     //               returns false.
 
-    nodeType<elemType>* searchBookISBN(const string& bookISBN = "") const;
-    // A function to search through the tree that contains the located IBSN.
 
     void insert
     (const string& insertTitle, const string& insertAuthor, const string& insertGenre, const string& insertISBN, const int& insertQuantity);
@@ -40,8 +38,11 @@ public:
     //               is not in the binary tree, an appropriate
     //               message is printed.
 
-    void updateQuantity(const string& bookISBN, const int& newQuantity);
-    // A function to update the book's quantity (searching through the book's ISBN).
+    void addBook();
+    // A function add a new book node
+
+    void updateBook (const string& bookISBN);
+    // A function to update a book's values (searching through the book's ISBN).
 
 private:
     void deleteFromTree(nodeType<elemType>*& p);
@@ -56,6 +57,7 @@ private:
 
     nodeType<elemType>* searchByISBN (const elemType& searchItem) const;
     // A helper function used to navigate where the located ISBN is.
+
 };
 
 
@@ -67,7 +69,7 @@ bool bSearchTreeType<elemType>::search
     bool found = false;
 
     if (this->root == nullptr)
-        cout << "Cannot search an empty tree." << endl;
+        cout << "There are no books in the inventory." << endl;
     else
     {
         current = this->root;
@@ -87,14 +89,42 @@ bool bSearchTreeType<elemType>::search
 }//end search
 
 template <class elemType>
-void bSearchTreeType<elemType>::updateQuantity(const string& bookISBN, const int& newQuantity) { // A function to update the book's quantity.
-		nodeType<elemType>* specificBook = searchByISBN(bookISBN); // Assign specificBook with a book that contains the same ISBN as bookISBN 
+void bSearchTreeType<elemType>::addBook() {
+    int userNum = 0;            // Input integer from the user
+    string userString[4];       // Input strings from the user
 
-		if (specificBook != nullptr) { // Check if the book exists or not.
-			specificBook->quantity = newQuantity;
-			cout << "Updated book\'s quantity successfully." << endl;
+    // Get input from the user
+    this->getInfo(userString[0], userString[1], userString[2], userString[3], userNum);
+
+    // Create a new node from the user input
+    insert(userString[0], userString[1], userString[2], userString[3], userNum);
+}
+
+template <class elemType>
+void bSearchTreeType<elemType>::updateBook (const string& bookISBN) { // A function to update the book's quantity.
+        int userNum = 0;            // Input integer from the user
+        string userString[4];       // Input strings from the user
+        nodeType<elemType>* specificBook = searchByISBN(bookISBN); // Assign specificBook with a book that contains the same ISBN as bookISBN 
+
+		if (specificBook != nullptr) { // Check if the book exists or not
+            cout << "Book Found. Please enter new information." << endl;
+
+            this->getInfo(userString[0], userString[1], userString[2], userString[3], userNum);
+
+            // Check if the new ISBN is not a copy of an already existing ISBN
+            if (searchByISBN(userString[3]) == nullptr) {
+                // Delete the book specified by the ISBN
+                deleteNode(specificBook->info);
+
+                // Insert a new book with the new information
+                cout << "Book Updated!" << endl;
+                insert(userString[0], userString[1], userString[2], userString[3], userNum);
+            }
+            else {
+                cout << "This book is already in the inventory!" << endl;
+            }
 		}
-		else{
+		else {
 			cout << "\nBook with ISBN: " << bookISBN << "\ndoes not exist." << endl;
 		}
 } // end updateQuantity
@@ -136,7 +166,7 @@ void bSearchTreeType<elemType>::insert
                 cout << "This book is already in the inventory!" << endl;
                 return;
             }
-            
+    
             // Iterate through each character of both the string to determine order
             if (checkLesser(current->info, insertTitle)) {
                 // If mismatching insert character is lesser than current string character
@@ -158,8 +188,6 @@ void bSearchTreeType<elemType>::insert
             trailCurrent->rLink = newNode;
         }
     }
-
-    cout << "Book added!" << endl;
 
 }//end insert
 
@@ -187,7 +215,7 @@ void bSearchTreeType<elemType>::deleteNode
             {
                 trailCurrent = current;
 
-                if (current->info > deleteItem)
+                if (checkLesser(current->info, deleteItem))
                     current = current->lLink;
                 else
                     current = current->rLink;
@@ -201,7 +229,7 @@ void bSearchTreeType<elemType>::deleteNode
         {
             if (current == this->root)
                 deleteFromTree(this->root);
-            else if (trailCurrent->info > deleteItem)
+            else if (checkLesser(trailCurrent->info, deleteItem))
                 deleteFromTree(trailCurrent->lLink);
             else
                 deleteFromTree(trailCurrent->rLink);
@@ -323,5 +351,7 @@ nodeType<elemType>* bSearchTreeType<elemType>::searchByISBN (const elemType& sea
 
 	return current;
 }//end searchByISBN
+
+
 
 #endif

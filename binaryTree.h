@@ -103,6 +103,10 @@ public:
     ~binaryTreeType();
     //Destructor
 
+    void getInfo
+    (string& userTitle, string& userAuthor, string& userGenre, string& userISBN, int& userNum);
+    // A function to get a new title, author, genre, ISBN, and quantity from the user
+
 protected:
     nodeType<elemType>* root;
 
@@ -371,6 +375,41 @@ int binaryTreeType<elemType>::leavesCount(nodeType<elemType>* p) const
             return 1;
         else
             return leavesCount(p->lLink) + leavesCount(p->rLink);
+}
+
+template <class elemType>
+void binaryTreeType<elemType>::getInfo // Function that gets new book info from the user
+(string& userTitle, string& userAuthor, string& userGenre, string& userISBN, int& userNum) {
+
+    cout << "Enter Title of Book: ";
+    getline(cin, userTitle); // Store the title within index 0 of userString
+
+    cout << "Enter Book Author: ";
+    getline(cin, userAuthor); // Store the author within index 1 of userString
+
+    cout << "Enter Book Genre: ";
+    getline(cin, userGenre); // Store the genre within index 2 of userString
+
+    cout << "Enter Book's ISBN: ";
+    getline(cin, userISBN); // Store the ISBN within index 3 of userString
+
+    while (userISBN.length() != 10 && userISBN.length() != 13) { // Check if the length of the ISBN is valid.
+        // Call the helper function searchByISBN
+        cout << "ERROR: Invalid ISBN (Must be 10 or 13 characters)" << endl;
+        cout << "Enter Book's ISBN: ";
+        getline(cin, userISBN); // Store the ISBN within index 3 of userString
+    }
+
+    cout << "Enter Book Quantity: ";
+    cin >> userNum;				 // Store the quantity of the book within userString
+
+    // Ensure that the capacity is valid
+    while (userNum < 0) {
+        cout << "ERROR: Invalid Quantity (Must be a positive integer)" << endl;
+        cout << "Enter Book Quantity: ";
+        cin.ignore();
+        cin >> userNum;				 // Store the quantity of the book within userString
+    }
 }
 
 template<class elemType>
