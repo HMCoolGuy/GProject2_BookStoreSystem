@@ -4,6 +4,8 @@
 #define H_binarySearchTree
 #include <iostream>
 #include <string>
+#include <vector> // TODO: check if vectors are allowed
+#include <algorithm> // TODO: check if algorithm is allowed (used for sort)
 #include "binaryTree.h"
 
 using namespace std;
@@ -46,6 +48,13 @@ public:
 
     void updateBook(const string& bookISBN);
     // A function to update a book's values (searching through the book's ISBN).
+
+    void showPopularGenres();
+    // A function to show genres within the inventory based off of their popularity
+
+    vector<genreType> getPopularGenres(nodeType<elemType>* p, vector<genreType>& genreList);
+    // A helper function to get genres within the inventory based off of their popularity
+
 
 private:
     void deleteFromTree(nodeType<elemType>*& p);
@@ -352,4 +361,51 @@ nodeType<elemType>* bSearchTreeType<elemType>::searchISBN (nodeType<elemType>* p
 	return searchISBN(p->rLink, searchItem);
 }//end searchISBN
 
+template <class elemType>
+void bSearchTreeType<elemType>::showPopularGenres() {
+    vector<genreType> genreList; // List of genres and the amount of books under them
+
+    // Store the genres and their book counts in genreList
+    genreList = getPopularGenres(this->root, genreList); 
+
+    // Display each book and their book count
+    for (int i = 0; i < genreList.size(); i++) {
+        cout << genreList.at(i).genre << ": " << genreList.at(i).bookCount << " books" << endl;
+    }
+}
+
+template <class elemType>
+vector<genreType> bSearchTreeType<elemType>::getPopularGenres(nodeType<elemType>* p, vector<genreType>& genreList) {
+    if (p == nullptr) { // Base case
+        return genreList; 
+    }
+
+    // Check if the genre of the node is within the list already
+    bool genreExists = false; 
+
+    // Check each item within the vector
+    for (int i = 0; i < genreList.size(); i++) {
+        // Increase the count of that genre if it exists within the vector
+        if (genreList.at(i).genre == p->genre) { 
+            genreList.at(i).bookCount++;
+            genreExists = true; // Skip adding the genre to the vector
+            break;
+        }
+    }
+
+    // If the genre was not found within the vector, add it.
+    if (!genreExists) {
+        genreType newGenre;
+        newGenre.genre = p->genre;
+        newGenre.bookCount = 1;
+        genreList.push_back(newGenre);
+    }
+
+    // Traverse left and right nodes
+    getPopularGenres(p->lLink, genreList);
+    getPopularGenres(p->rLink, genreList);
+
+    // Return the list of genres and their book counts
+    return genreList;
+}
 #endif
