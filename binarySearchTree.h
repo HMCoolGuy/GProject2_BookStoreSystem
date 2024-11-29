@@ -56,8 +56,10 @@ private:
     // for alphabetical sorting purposes.
 
     nodeType<elemType>* searchByISBN (const elemType& searchItem) const;
-    // A helper function used to navigate where the located ISBN is.
-
+    // A function to update the book's quantity (searching through the book's ISBN).
+    
+    nodeType<elemType>* searchISBN (nodeType<elemType>* p, const elemType& searchItem) const;
+    // A helper function used to navigate where the located ISBN is in the entire tree.
 };
 
 
@@ -329,28 +331,28 @@ bool bSearchTreeType<T>::checkLesser(string str1, string str2) {
 }
 
 template <class elemType>
-nodeType<elemType>* bSearchTreeType<elemType>::searchByISBN (const elemType& searchItem) const { // A helper function used to navigate where the located ISBN is.
-	nodeType<elemType>* current;
-	bool found = false;
+nodeType<elemType>* bSearchTreeType<elemType>::searchByISBN (const elemType& searchItem) const { // Search the tree that contains the located IBSN.
+	// Call the helper function searchISBN to search for the located ISBN.
+	return searchISBN(this->root, searchItem);
+}// searchByISBN
 
-	if (this->root == nullptr) // check if the root is empty
-		current = nullptr;
-	else
-	{
-		current = this->root;
+template <class elemType>
+nodeType<elemType>* bSearchTreeType<elemType>::searchISBN (nodeType<elemType>* p, const elemType& searchItem) const{
+	if(p == nullptr) // Check if the node is empty.
+		return nullptr;
+			
+	// Base Case: Traverse the left substree
+	nodeType<elemType>* leftNode = searchISBN(p);
+	if(leftNode != nullptr)
+		return leftNode;
+	
+	// Base Case: Check the current node is equal to the located ISBN.
+	if (p->ISBN == searchItem)
+		return p;
 
-		while (current != nullptr && !found){ // Run until either the located ISBN is found or the it reaches the end of the list.
-			if (current->ISBN == searchItem)
-				found = true;
-			else if (current->ISBN.compare(searchItem) > 0)
-				current = current->lLink;
-			else
-				current = current->rLink;
-		}//end while
-	}//end else
-
-	return current;
-}//end searchByISBN
+	// Recursive Case: Traverse the right substree
+	return searchISBN(p->rLink, searchItem);
+}//end searchISBN
 
 
 
