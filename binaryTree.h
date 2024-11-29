@@ -17,6 +17,7 @@ struct nodeType
     string genre; // Genre of the book
     string ISBN; // ISBN of the book
     int quantity; // Quantity of book in the store
+    int sales = 0;  // Amount of times a book has been sold
 
     nodeType<elemType>* lLink;
     nodeType<elemType>* rLink;
@@ -94,13 +95,19 @@ public:
     //               deleteItem is not in the binary tree, 
     //               an appropriate message is printed.
 
-    void getInfo
+    void setInfo
     (string& userTitle, string& userAuthor, string& userGenre, string& userISBN, int& userNum);
     // A function to get a new title, author, genre, ISBN, and quantity from the user
 
     void printBook(nodeType<elemType>* p) const;
     // Function to print a given book node's information
     // (Title, Author, Genre, ISBN, and Quantity).
+
+    int getBookTotal() const;
+    // Function to return the total amount of books within the inventory
+
+    int getSalesTotal() const;
+    // Function to return the total amount of books within the inventory
 
     binaryTreeType(const binaryTreeType<elemType>& otherTree);
     //Copy constructor
@@ -170,6 +177,12 @@ private:
     //the binary tree to which p points 
     //Postcondition: The number of leaves in the binary 
     //               tree to which p points is returned.
+
+    int traverseBookTotal(nodeType<elemType>* p) const;
+    // Helper function of getBookTotal that returns a running count of all book quantities.
+
+    int traverseSalesTotal(nodeType<elemType>* p) const;
+    // Helper function of getBookTotal that returns a running count of all book quantities.
 
 };
 
@@ -378,7 +391,7 @@ int binaryTreeType<elemType>::leavesCount(nodeType<elemType>* p) const
 }
 
 template <class elemType>
-void binaryTreeType<elemType>::getInfo // Function that gets new book info from the user
+void binaryTreeType<elemType>::setInfo // Function that gets new book info from the user
 (string& userTitle, string& userAuthor, string& userGenre, string& userISBN, int& userNum) {
 
     cout << "Enter Title of Book: ";
@@ -423,7 +436,39 @@ void binaryTreeType<elemType>::printBook(nodeType<elemType>* p) const {
     // Print the book ISBN
     cout << "ISBN: " << p->ISBN << " | ";
     // Print the quantity of the book
-    cout << "Quantity: " << p->quantity << endl;
+    cout << "Quantity: " << p->quantity << " | ";
+    // Print the quantity of the book
+    cout << "Sales: " << p->sales << endl;
+}
+
+// Function that returns the total amount of books within the inventory
+template<class elemType>
+int binaryTreeType<elemType>::getBookTotal() const {
+    return traverseBookTotal(this->root); // Use recursive helper function to traverse the list for each quantity
+}
+
+template<class elemType>
+int binaryTreeType<elemType>::traverseBookTotal(nodeType<elemType>* p) const { // Helper function
+    if (p == nullptr) { // Base case
+        return 0;
+    }
+    // Traverse the list and return the total sum of each quantity
+    return p->quantity + traverseBookTotal(p->lLink) + traverseBookTotal(p->rLink);
+}
+
+// Function that returns the total amount of book sales
+template<class elemType>
+int binaryTreeType<elemType>::getSalesTotal() const {
+    return traverseSalesTotal(this->root); // Use recursive helper function to traverse the list for each sales amount
+}
+
+template<class elemType>
+int binaryTreeType<elemType>::traverseSalesTotal(nodeType<elemType>* p) const { // Helper function
+    if (p == nullptr) { // Base case
+        return 0;
+    }
+    // Traverse the list and return the total sum of each sales amount
+    return p->sales + traverseSalesTotal(p->lLink) + traverseSalesTotal(p->rLink);
 }
 
 #endif

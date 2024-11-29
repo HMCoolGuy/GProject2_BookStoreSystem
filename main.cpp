@@ -146,7 +146,19 @@ int main() {
 			}
 			break;
 		case 5: // If user has selected 5 (Analyze Inventory)
-			cout << "TODO: Put inventory analysis functions here (identifying popular gneres, tracking book sales, and managing stock levels)" << endl;
+
+			// Check if inventory is empty
+			if (bookInv.isEmpty()) {
+				cout << "There are no books in the inventory." << endl;
+			}
+			else {
+				cout << "\nGenres Sorted by Popularity:";
+				cout << "TODO: print out genres sorted by popularity\n\n";
+
+				cout << "Total Book Amount: " << bookInv.getBookTotal() << endl;
+				cout << "Total Sales: " << bookInv.getSalesTotal() << "\n\n";
+			}
+
 			break;
 		}
 		// If user selects 6, program stops
