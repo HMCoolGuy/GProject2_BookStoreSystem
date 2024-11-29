@@ -114,7 +114,7 @@ void bSearchTreeType<elemType>::updateBook (const string& bookISBN) { // A funct
             this->getInfo(userString[0], userString[1], userString[2], userString[3], userNum);
 
             // Check if the new ISBN is not a copy of an already existing ISBN
-            if (searchByISBN(userString[3]) == nullptr) {
+            if (searchByISBN(userString[3]) == nullptr || userString[3] == specificBook->ISBN) {
                 // Delete the book specified by the ISBN
                 deleteNode(specificBook->info);
 
@@ -341,19 +341,17 @@ nodeType<elemType>* bSearchTreeType<elemType>::searchISBN (nodeType<elemType>* p
 	if(p == nullptr) // Check if the node is empty.
 		return nullptr;
 			
+    // Base Case: Check the current node is equal to the located ISBN.
+    if (p->ISBN == searchItem)
+        return p;
+
 	// Base Case: Traverse the left substree
-	nodeType<elemType>* leftNode = searchISBN(p);
+	nodeType<elemType>* leftNode = searchISBN(p->lLink, searchItem);
 	if(leftNode != nullptr)
 		return leftNode;
-	
-	// Base Case: Check the current node is equal to the located ISBN.
-	if (p->ISBN == searchItem)
-		return p;
 
 	// Recursive Case: Traverse the right substree
 	return searchISBN(p->rLink, searchItem);
 }//end searchISBN
-
-
 
 #endif
