@@ -94,6 +94,14 @@ public:
     //               deleteItem is not in the binary tree, 
     //               an appropriate message is printed.
 
+    void getInfo
+    (string& userTitle, string& userAuthor, string& userGenre, string& userISBN, int& userNum);
+    // A function to get a new title, author, genre, ISBN, and quantity from the user
+
+    void printBook(nodeType<elemType>* p) const;
+    // Function to print a given book node's information
+    // (Title, Author, Genre, ISBN, and Quantity).
+
     binaryTreeType(const binaryTreeType<elemType>& otherTree);
     //Copy constructor
 
@@ -103,16 +111,8 @@ public:
     ~binaryTreeType();
     //Destructor
 
-    void getInfo
-    (string& userTitle, string& userAuthor, string& userGenre, string& userISBN, int& userNum);
-    // A function to get a new title, author, genre, ISBN, and quantity from the user
-
 protected:
     nodeType<elemType>* root;
-
-    void printBook(nodeType<elemType>* p) const;
-    // Function to print a given book node's information
-    // (Title, Author, Genre, ISBN, and Quantity).
 
 private:
     void copyTree(nodeType<elemType>*& copiedTreeRoot,

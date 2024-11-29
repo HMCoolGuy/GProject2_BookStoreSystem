@@ -17,6 +17,7 @@ int main() {
 	const string SEP_LINE = "-----------------------\n";
 
 	bSearchTreeType<string> bookInv;	// Contains books as nodes in the binary search tree
+	nodeType<string>* specificBook;     // Singular book node used for searching for a book
 	int userInt = 0;					// Allows the user to input a number
 	string userString[4];				// Allows the user to input strings
 
@@ -50,8 +51,8 @@ int main() {
 		cout << SEP_LINE; // Seperation line for formatting
 
 		// Carry out a choice depending on what the user has selected
-		switch (userInt) { // TODO: Check if switch statements are allowed
-		case 1: // If user has selected 1
+		switch (userInt) {
+		case 1: // If user has selected 1 (View Inventory)
 			if (bookInv.isEmpty()) {
 				cout << "There are no books in the inventory." << endl;
 			}
@@ -63,18 +64,72 @@ int main() {
 			}
 
 			break;
-		case 2: // If user has selected 2
-			cout << "TODO: Allow user to search for a specific book (through isbn, title, genre, or author)" << endl;
+		case 2: // If user has selected 2 (Search for an existing book)
+
+			// Confirm the inventory is not empty
+			if (bookInv.isEmpty()) { 
+				cout << "There are no books in the inventory." << endl;
+			} 
+			// Print out options for user to search for book (either through title, author, genre, or ISBN)
+			else {  
+				cout << "Search for book by..." << endl;
+				cout << "1) Title" << endl;
+				cout << "2) Author" << endl;
+				cout << "3) Genre" << endl;
+				cout << "4) ISBN" << endl;
+				cout << "5) Go back" << endl;
+				
+				// Prompt user for input
+				cout << "Please enter a valid number: ";
+				cin >> userInt;
+
+				while (userInt < 1 || userInt > 5) { // Ensure that the users input is within range of valid choices
+					cout << SEP_LINE; // Seperation line for formatting
+					cout << "ERROR: Invalid Selection" << endl;
+					cout << "Please enter a valid number: ";
+					cin >> userInt;
+				}
+
+				switch (userInt) {
+				case 1: // Searching through title
+					cout << "TODO: search through title" << endl;
+					break;
+				case 2: // Searching through Author
+					cout << "TODO: search through author" << endl;
+					break;
+				case 3: // Searching through Genre
+					cout << "TODO: search through genre" << endl;
+					break;
+				case 4: // Searching through ISBN
+					cout << "Enter ISBN of book to search for: ";
+					cin.ignore();
+					getline(cin, userString[3]); // Store the ISBN into index 3 of userString
+
+					specificBook = bookInv.searchByISBN(userString[3]); // Search for the book through its ISBN
+
+					cout << endl;
+					if (specificBook == nullptr) {	// Confirm that the book exists
+						cout << "This book is not in inventory." << endl;
+					}
+					else {  // Display the book's information
+						cout << "Book Found!" << endl << "=================" << endl;
+						bookInv.printBook(specificBook);
+					}
+					cout << endl;
+
+				case 5: // Going back to the main menu
+					break;
+				}
+			}
 			break;
 
-		case 3: // If user has selected 3
-
+		case 3: // If user has selected 3 (Add a book)
 			// Create a new book node to insert
 			cin.ignore();
 			bookInv.addBook();
 
 			break;
-		case 4: // If user has selected 4
+		case 4: // If user has selected 4 (Update an existing book)
 
 			// Check if inventory is empty
 			if (bookInv.isEmpty()) {
@@ -86,18 +141,11 @@ int main() {
 				cin.ignore();
 				getline(cin, userString[3]); // Store the ISBN into index 3 of userString
 
-				while (userString[3].length() != 10 && userString[3].length() != 13) { // Check if the length of the ISBN is valid.
-					// Call the helper function searchByISBN
-					cout << "ERROR: Invalid ISBN (Must be 10 or 13 characters)" << endl;
-					cout << "Enter Book's ISBN: ";
-					getline(cin, userString[3]); // Store the ISBN within index 3 of userString
-				}
-
 				// Update the book with its new quantity.
 				bookInv.updateBook(userString[3]);
 			}
 			break;
-		case 5: // If user has selected 5
+		case 5: // If user has selected 5 (Analyze Inventory)
 			cout << "TODO: Put inventory analysis functions here (identifying popular gneres, tracking book sales, and managing stock levels)" << endl;
 			break;
 		}

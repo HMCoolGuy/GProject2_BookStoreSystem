@@ -41,7 +41,10 @@ public:
     void addBook();
     // A function add a new book node
 
-    void updateBook (const string& bookISBN);
+    nodeType<elemType>* searchByISBN(const elemType& searchItem) const;
+    // A function to search for a book through the book's ISBN.
+
+    void updateBook(const string& bookISBN);
     // A function to update a book's values (searching through the book's ISBN).
 
 private:
@@ -54,9 +57,6 @@ private:
     bool checkLesser(string str1, string str2);
     // Function to check for which string is lesser than the other
     // for alphabetical sorting purposes.
-
-    nodeType<elemType>* searchByISBN (const elemType& searchItem) const;
-    // A function to update the book's quantity (searching through the book's ISBN).
     
     nodeType<elemType>* searchISBN (nodeType<elemType>* p, const elemType& searchItem) const;
     // A helper function used to navigate where the located ISBN is in the entire tree.
@@ -293,8 +293,6 @@ void bSearchTreeType<elemType>::deleteFromTree
         delete current;
     }//end else
 } //end deleteFromTree
-
-
 
 template <typename T>
 bool bSearchTreeType<T>::checkLesser(string str1, string str2) {
