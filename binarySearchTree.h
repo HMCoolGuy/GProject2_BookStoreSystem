@@ -96,7 +96,7 @@ void bSearchTreeType<elemType>::addBook() {
     string userString[4];       // Input strings from the user
 
     // Get input from the user
-    this->getInfo(userString[0], userString[1], userString[2], userString[3], userNum);
+    this->setInfo(userString[0], userString[1], userString[2], userString[3], userNum);
 
     // Create a new node from the user input
     insert(userString[0], userString[1], userString[2], userString[3], userNum);
@@ -111,7 +111,7 @@ void bSearchTreeType<elemType>::updateBook (const string& bookISBN) { // A funct
 		if (specificBook != nullptr) { // Check if the book exists or not
             cout << "Book Found. Please enter new information." << endl;
 
-            this->getInfo(userString[0], userString[1], userString[2], userString[3], userNum);
+            this->setInfo(userString[0], userString[1], userString[2], userString[3], userNum);
 
             // Check if the new ISBN is not a copy of an already existing ISBN
             if (searchByISBN(userString[3]) == nullptr || userString[3] == specificBook->ISBN) {
