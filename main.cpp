@@ -17,12 +17,13 @@ int main() {
 	const string SEP_LINE = "-----------------------\n";
 
 	bSearchTreeType<string> bookInv;	// Contains books as nodes in the binary search tree
+	nodeType<string>* specificBook;     // Singular book node used for searching for a book
 	int userInt = 0;					// Allows the user to input a number
 	string userString[4];				// Allows the user to input strings
 
 	cout << "** BOOKSTORE INVENTORY SYSTEM **" << endl;
 	// Begin while loop that will only exit if the user chooses to do so
-	while (userInt != 6) { // 5 will be the exit for now
+	while (userInt != 7) { // 7 is the exit
 
 		cout << SEP_LINE; // Seperation line for formatting
 
@@ -32,7 +33,8 @@ int main() {
 		cout << "3) Add a book" << endl;
 		cout << "4) Update an existing book" << endl;
 		cout << "5) Analyze Inventory" << endl;
-		cout << "6) Exit Program" << endl;
+		cout << "6) Place a Book Order" << endl;
+		cout << "7) Exit Program" << endl;
 		// TODO: Add the rest of the functions for analyzing the inventory
 		// TODO: Add the rest of the functions for processing book sales, updating inventory quantities, and managing customer orders.
 
@@ -40,7 +42,7 @@ int main() {
 		cout << "Please enter a valid number: ";
 		cin >> userInt;
 
-		while (userInt < 1 || userInt > 6) { // Ensure that the users input is within range of valid choices
+		while (userInt < 1 || userInt > 7) { // Ensure that the users input is within range of valid choices
 			cout << SEP_LINE; // Seperation line for formatting
 			cout << "ERROR: Invalid Selection" << endl;
 			cout << "Please enter a valid number: ";
@@ -50,8 +52,8 @@ int main() {
 		cout << SEP_LINE; // Seperation line for formatting
 
 		// Carry out a choice depending on what the user has selected
-		switch (userInt) { // TODO: Check if switch statements are allowed
-		case 1: // If user has selected 1
+		switch (userInt) {
+		case 1: // If user has selected 1 (View Inventory)
 			if (bookInv.isEmpty()) {
 				cout << "There are no books in the inventory." << endl;
 			}
@@ -64,12 +66,13 @@ int main() {
 
 			break;
 		case 2: // If user has selected 2 (Search for an existing book)
+
 			// Confirm the inventory is not empty
-			if (bookInv.isEmpty()) {
+			if (bookInv.isEmpty()) { 
 				cout << "There are no books in the inventory." << endl;
-			}
+			} 
 			// Print out options for user to search for book (either through title, author, genre, or ISBN)
-			else {
+			else {  
 				cout << "Search for book by..." << endl;
 				cout << "1) Title" << endl;
 				cout << "2) Author" << endl;
@@ -77,10 +80,11 @@ int main() {
 				cout << "4) ISBN" << endl;
 				cout << "5) Go back" << endl;
 
+				
 				// Prompt user for input
 				cout << "Please enter a valid number: ";
 				cin >> userInt;
-		
+
 				while (userInt < 1 || userInt > 5) { // Ensure that the users input is within range of valid choices
 					cout << SEP_LINE; // Seperation line for formatting
 					cout << "ERROR: Invalid Selection" << endl;
@@ -133,14 +137,15 @@ int main() {
 					}
 				}
 			break;
-		case 3: // If user has selected 3
+
+		case 3: // If user has selected 3 (Add a book)
 
 			// Create a new book node to insert
 			cin.ignore();
 			bookInv.addBook();
-
 			break;
-		case 4: // If user has selected 4
+
+		case 4: // If user has selected 4 (Update an existing book)
 
 			// Check if inventory is empty
 			if (bookInv.isEmpty()) {
@@ -152,22 +157,46 @@ int main() {
 				cin.ignore();
 				getline(cin, userString[3]); // Store the ISBN into index 3 of userString
 
-				while (userString[3].length() != 10 && userString[3].length() != 13) { // Check if the length of the ISBN is valid.
-					// Call the helper function searchByISBN
-					cout << "ERROR: Invalid ISBN (Must be 10 or 13 characters)" << endl;
-					cout << "Enter Book's ISBN: ";
-					getline(cin, userString[3]); // Store the ISBN within index 3 of userString
-				}
-
 				// Update the book with its new quantity.
 				bookInv.updateBook(userString[3]);
 			}
 			break;
-		case 5: // If user has selected 5
-			cout << "TODO: Put inventory analysis functions here (identifying popular gneres, tracking book sales, and managing stock levels)" << endl;
+
+		case 5: // If user has selected 5 (Analyze Inventory)
+
+			// Check if inventory is empty
+			if (bookInv.isEmpty()) {
+				cout << "There are no books in the inventory." << endl;
+			}
+			else {
+				// Display genre's sorted by popularity (how often they appear in the inventory)
+				cout << "\nGenres Sorted by Popularity:" << endl;
+				bookInv.showPopularGenres();
+				cout << endl;
+
+				// Display order history from most to least recent
+				cout << "Order History (From Most to Least Recent): " << endl;
+				bookInv.displayHistory();
+
+				// Display the total amount of books and sales
+				cout << "Total Book Amount: " << bookInv.getBookTotal() << endl;
+				cout << "Total Sales: " << bookInv.getAllSalesTotal() << "\n\n";
+			}
+
+			break;
+
+		case 6: // If user has selected 6 (Place a book order)
+			// Check if inventory is empty
+			if (bookInv.isEmpty()) {
+				cout << "There are no books in the inventory." << endl;
+			}
+			else {
+				// Prompt the user to order the book
+				bookInv.orderBook();
+			}
 			break;
 		}
-		// If user selects 6, program stops
+		// If user selects 7, program stops
 	}
 	cout << "Exiting Program..." << endl;
 	return 0;
