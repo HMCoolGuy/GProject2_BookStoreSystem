@@ -396,7 +396,7 @@ vector<genreType> bSearchTreeType<elemType>::getGenres(nodeType<elemType>* p, ve
         return genreList; 
     }
 
-    // Traverse left and right nodes
+    // Traverse left node
     getGenres(p->lLink, genreList);
 
     bool genreExists = false; 
@@ -418,6 +418,7 @@ vector<genreType> bSearchTreeType<elemType>::getGenres(nodeType<elemType>* p, ve
         genreList.push_back(newGenre);
     }
 
+    // Traverse right node
     getGenres(p->rLink, genreList);
 
     // Return the list of genres and their book counts
