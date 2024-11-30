@@ -152,8 +152,9 @@ int main() {
 				cout << "There are no books in the inventory." << endl;
 			}
 			else {
-				cout << "\nGenres Sorted by Popularity:";
-				cout << "TODO: print out genres sorted by popularity\n\n";
+				cout << "\nGenres Sorted by Popularity:" << endl;
+				bookInv.showPopularGenres();
+				cout << endl;
 
 				cout << "Total Book Amount: " << bookInv.getBookTotal() << endl;
 				cout << "Total Sales: " << bookInv.getSalesTotal() << "\n\n";
