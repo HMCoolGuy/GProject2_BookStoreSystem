@@ -23,6 +23,12 @@ struct nodeType
     nodeType<elemType>* rLink;
 };
 
+// Variable type that holds a genre and the amount of books under it
+struct genreType {
+    string genre;
+    int bookCount;
+};
+
 //Definition of the class
 template <class elemType>
 class binaryTreeType
