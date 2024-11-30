@@ -109,11 +109,20 @@ public:
     // Function to print a given book node's information
     // (Title, Author, Genre, ISBN, and Quantity).
 
+    void addToHistory(nodeType<elemType> p);
+    // Function to add a book to the order history
+
+    void displayHistory();
+    // Function to display the order history
+
     int getBookTotal() const;
     // Function to return the total amount of books within the inventory
 
-    int getSalesTotal() const;
-    // Function to return the total amount of books within the inventory
+    void incrementAllTotalSales();
+    // Function to increment the total sales
+
+    int getAllSalesTotal() const;
+    // Function to return the total amount of sales made
 
     binaryTreeType(const binaryTreeType<elemType>& otherTree);
     //Copy constructor
@@ -128,6 +137,9 @@ protected:
     nodeType<elemType>* root;
 
 private:
+    vector<nodeType<elemType>> orderHistory;      // Vector for keeping track of orders
+    int totalSales = 0; // Keeps track of total sales made
+
     void copyTree(nodeType<elemType>*& copiedTreeRoot,
         nodeType<elemType>* otherTreeRoot);
     //Makes a copy of the binary tree to which 
@@ -185,9 +197,6 @@ private:
     //               tree to which p points is returned.
 
     int traverseBookTotal(nodeType<elemType>* p) const;
-    // Helper function of getBookTotal that returns a running count of all book quantities.
-
-    int traverseSalesTotal(nodeType<elemType>* p) const;
     // Helper function of getBookTotal that returns a running count of all book quantities.
 
 };
@@ -447,6 +456,28 @@ void binaryTreeType<elemType>::printBook(nodeType<elemType>* p) const {
     cout << "Sales: " << p->sales << endl;
 }
 
+template<class elemType>
+void binaryTreeType<elemType>::addToHistory(nodeType<elemType> p) {
+    orderHistory.push_back(p); // Add a book's info (its info before it is ordered) to the orderHistory
+}
+
+template<class elemType>
+void binaryTreeType<elemType>::displayHistory() {
+
+    // Check if any orders have been places
+    if (orderHistory.size() == 0) {
+        cout << "No orders have been placed yet.";
+    }
+    else {
+        // Traverse the list from most to least recent orders
+        for (int i = (orderHistory.size() - 1); i >= 0; i--) {
+            this->printBook(&orderHistory.at(i));
+        }
+    }
+
+    cout << "\n\n";
+}
+
 // Function that returns the total amount of books within the inventory
 template<class elemType>
 int binaryTreeType<elemType>::getBookTotal() const {
@@ -462,19 +493,16 @@ int binaryTreeType<elemType>::traverseBookTotal(nodeType<elemType>* p) const { /
     return p->quantity + traverseBookTotal(p->lLink) + traverseBookTotal(p->rLink);
 }
 
-// Function that returns the total amount of book sales
 template<class elemType>
-int binaryTreeType<elemType>::getSalesTotal() const {
-    return traverseSalesTotal(this->root); // Use recursive helper function to traverse the list for each sales amount
+void binaryTreeType<elemType>::incrementAllTotalSales() {
+    totalSales++; // Increment all total sales by 1
 }
 
 template<class elemType>
-int binaryTreeType<elemType>::traverseSalesTotal(nodeType<elemType>* p) const { // Helper function
-    if (p == nullptr) { // Base case
-        return 0;
-    }
-    // Traverse the list and return the total sum of each sales amount
-    return p->sales + traverseSalesTotal(p->lLink) + traverseSalesTotal(p->rLink);
+int binaryTreeType<elemType>::getAllSalesTotal() const {
+    return totalSales;
 }
+
+
 
 #endif

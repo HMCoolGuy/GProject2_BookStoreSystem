@@ -23,7 +23,7 @@ int main() {
 
 	cout << "** BOOKSTORE INVENTORY SYSTEM **" << endl;
 	// Begin while loop that will only exit if the user chooses to do so
-	while (userInt != 6) { // 5 will be the exit for now
+	while (userInt != 7) { // 7 is the exit
 
 		cout << SEP_LINE; // Seperation line for formatting
 
@@ -33,7 +33,8 @@ int main() {
 		cout << "3) Add a book" << endl;
 		cout << "4) Update an existing book" << endl;
 		cout << "5) Analyze Inventory" << endl;
-		cout << "6) Exit Program" << endl;
+		cout << "6) Place a Book Order" << endl;
+		cout << "7) Exit Program" << endl;
 		// TODO: Add the rest of the functions for analyzing the inventory
 		// TODO: Add the rest of the functions for processing book sales, updating inventory quantities, and managing customer orders.
 
@@ -41,7 +42,7 @@ int main() {
 		cout << "Please enter a valid number: ";
 		cin >> userInt;
 
-		while (userInt < 1 || userInt > 6) { // Ensure that the users input is within range of valid choices
+		while (userInt < 1 || userInt > 7) { // Ensure that the users input is within range of valid choices
 			cout << SEP_LINE; // Seperation line for formatting
 			cout << "ERROR: Invalid Selection" << endl;
 			cout << "Please enter a valid number: ";
@@ -64,6 +65,7 @@ int main() {
 			}
 
 			break;
+
 		case 2: // If user has selected 2 (Search for an existing book)
 
 			// Confirm the inventory is not empty
@@ -124,11 +126,12 @@ int main() {
 			break;
 
 		case 3: // If user has selected 3 (Add a book)
+
 			// Create a new book node to insert
 			cin.ignore();
 			bookInv.addBook();
-
 			break;
+
 		case 4: // If user has selected 4 (Update an existing book)
 
 			// Check if inventory is empty
@@ -145,6 +148,7 @@ int main() {
 				bookInv.updateBook(userString[3]);
 			}
 			break;
+
 		case 5: // If user has selected 5 (Analyze Inventory)
 
 			// Check if inventory is empty
@@ -152,17 +156,34 @@ int main() {
 				cout << "There are no books in the inventory." << endl;
 			}
 			else {
+				// Display genre's sorted by popularity (how often they appear in the inventory)
 				cout << "\nGenres Sorted by Popularity:" << endl;
 				bookInv.showPopularGenres();
 				cout << endl;
 
+				// Display order history from most to least recent
+				cout << "Order History (From Most to Least Recent): " << endl;
+				bookInv.displayHistory();
+
+				// Display the total amount of books and sales
 				cout << "Total Book Amount: " << bookInv.getBookTotal() << endl;
-				cout << "Total Sales: " << bookInv.getSalesTotal() << "\n\n";
+				cout << "Total Sales: " << bookInv.getAllSalesTotal() << "\n\n";
 			}
 
 			break;
+
+		case 6: // If user has selected 6 (Place a book order)
+			// Check if inventory is empty
+			if (bookInv.isEmpty()) {
+				cout << "There are no books in the inventory." << endl;
+			}
+			else {
+				// Prompt the user to order the book
+				bookInv.orderBook();
+			}
+			break;
 		}
-		// If user selects 6, program stops
+		// If user selects 7, program stops
 	}
 	cout << "Exiting Program..." << endl;
 	return 0;

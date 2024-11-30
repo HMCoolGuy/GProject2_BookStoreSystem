@@ -20,6 +20,11 @@ public:
     //               the binary search tree; otherwise,
     //               returns false.
 
+    void addBook();
+    // A function add a new book node
+
+    void updateBook(const string& bookISBN);
+    // A function to update a book's values (searching through the book's ISBN).
 
     void insert
     (const string& insertTitle, const string& insertAuthor, const string& insertGenre, const string& insertISBN, const int& insertQuantity);
@@ -39,23 +44,20 @@ public:
     //               is not in the binary tree, an appropriate
     //               message is printed.
 
-    void addBook();
-    // A function add a new book node
 
     nodeType<elemType>* searchByISBN(const elemType& searchItem) const;
     // A function to search for a book through the book's ISBN.
 
-    void updateBook(const string& bookISBN);
-    // A function to update a book's values (searching through the book's ISBN).
 
     void showPopularGenres();
     // A function to show genres within the inventory based off of their popularity
 
-    vector<genreType> getGenres(nodeType<elemType>* p, vector<genreType>& genreList);
-    // A helper function to get genres within the inventory based off of their popularity
+    void orderBook();
+    // A function  that let the user order a book
 
 
 private:
+
     void deleteFromTree(nodeType<elemType>*& p);
     //Function to delete the node to which p points is
     //deleted from the binary search tree.
@@ -68,6 +70,9 @@ private:
     
     nodeType<elemType>* searchISBN (nodeType<elemType>* p, const elemType& searchItem) const;
     // A helper function used to navigate where the located ISBN is in the entire tree.
+
+    vector<genreType> getGenres(nodeType<elemType>* p, vector<genreType>& genreList);
+    // A helper function to get genres within the inventory based off of their popularity
 };
 
 
@@ -106,38 +111,15 @@ void bSearchTreeType<elemType>::addBook() {
     // Get input from the user
     this->setInfo(userString[0], userString[1], userString[2], userString[3], userNum);
 
+    // Ensure the book is within the tree to confirm with the user
+    nodeType<elemType>* specificBook = searchByISBN(userString[3]);
+    if (specificBook == nullptr) {
+        cout << "Book added!" << endl;
+    }
+
     // Create a new node from the user input
     insert(userString[0], userString[1], userString[2], userString[3], userNum);
 }
-
-template <class elemType>
-void bSearchTreeType<elemType>::updateBook (const string& bookISBN) { // A function to update the book's quantity.
-        int userNum = 0;            // Input integer from the user
-        string userString[4];       // Input strings from the user
-        nodeType<elemType>* specificBook = searchByISBN(bookISBN); // Assign specificBook with a book that contains the same ISBN as bookISBN 
-
-		if (specificBook != nullptr) { // Check if the book exists or not
-            cout << "Book Found. Please enter new information." << endl;
-
-            this->setInfo(userString[0], userString[1], userString[2], userString[3], userNum);
-
-            // Check if the new ISBN is not a copy of an already existing ISBN
-            if (searchByISBN(userString[3]) == nullptr || userString[3] == specificBook->ISBN) {
-                // Delete the book specified by the ISBN
-                deleteNode(specificBook->info);
-
-                // Insert a new book with the new information
-                cout << "Book Updated!" << endl;
-                insert(userString[0], userString[1], userString[2], userString[3], userNum);
-            }
-            else {
-                cout << "This book is already in the inventory!" << endl;
-            }
-		}
-		else {
-			cout << "\nBook with ISBN: " << bookISBN << "\ndoes not exist." << endl;
-		}
-} // end updateQuantity
 
 template <class elemType>
 void bSearchTreeType<elemType>::insert
@@ -200,6 +182,35 @@ void bSearchTreeType<elemType>::insert
     }
 
 }//end insert
+
+template <class elemType>
+void bSearchTreeType<elemType>::updateBook(const string& bookISBN) { // A function to update the book's quantity.
+    int userNum = 0;            // Input integer from the user
+    string userString[4];       // Input strings from the user
+    nodeType<elemType>* specificBook = searchByISBN(bookISBN); // Assign specificBook with a book that contains the same ISBN as bookISBN 
+
+    if (specificBook != nullptr) { // Check if the book exists or not
+        cout << "Book Found. Please enter new information." << endl;
+
+        this->setInfo(userString[0], userString[1], userString[2], userString[3], userNum);
+
+        // Check if the new ISBN is not a copy of an already existing ISBN
+        if (searchByISBN(userString[3]) == nullptr || userString[3] == specificBook->ISBN) {
+            // Delete the book specified by the ISBN (Resets the book's sales by default, but sales are still kept in totalSales)
+            deleteNode(specificBook->info);
+
+            // Insert a new book with the new information
+            cout << "Book Updated!" << endl;
+            insert(userString[0], userString[1], userString[2], userString[3], userNum);
+        }
+        else {
+            cout << "This book is already in the inventory!" << endl;
+        }
+    }
+    else {
+        cout << "\nBook with ISBN: " << bookISBN << "\ndoes not exist." << endl;
+    }
+} // end updateQuantity
 
 template <class elemType>
 void bSearchTreeType<elemType>::deleteNode
@@ -425,3 +436,58 @@ vector<genreType> bSearchTreeType<elemType>::getGenres(nodeType<elemType>* p, ve
     return genreList;
 }
 #endif
+
+template <class elemType>
+void bSearchTreeType<elemType>::orderBook() {
+    nodeType<elemType>* specificBook; // Specific book to be ordered
+    string userISBN; // Input ISBN from the user
+    int userInt;  // Input selection from the user
+
+    cout << "Enter ISBN of book to place order for: ";
+    cin.ignore();
+    getline(cin, userISBN); // Store the ISBN 
+
+    // Search for the book with its ISBN
+    specificBook = this->searchByISBN(userISBN);
+
+    if (specificBook != nullptr) { // Check if the book exists or not
+        cout << "\nBook Found.\n";
+        cout << "===================\n";
+
+        this->printBook(specificBook); // Display the information of the book
+
+        // Check with the user if they want to place an order for this book
+        if (specificBook->quantity >= 1) {
+            cout << "\nPlace an order for this book?" << endl;
+            cout << "1) Yes  |  2) No  " << endl;
+            cout << "Input a valid number: ";
+            cin >> userInt;
+
+            // Ensure valid input
+            while (userInt < 1 || userInt > 2) {
+                cout << "ERROR: Invalid choice." << endl;
+                cout << "Input a valid number:";
+                cin >> userInt;
+            }
+
+            switch (userInt) {
+            case 1: // If user wants to place an order
+                this->addToHistory(*specificBook); // Save the book's information in the order history
+                specificBook->quantity--; // Decrement quantity by 1
+                specificBook->sales++;    // Increase sales of book by 1
+                this->incrementAllTotalSales();    // Increase total sales of bookstore by 1
+                cout << "\nBook order placed!\n";
+                break;
+            case 2:
+                cout << "\nOrder cancelled!" << endl;
+                break;
+            }
+        }
+        else {
+            cout << "\nThe supply of this book is empty!" << endl;
+        }
+    }
+    else {
+        cout << "\nBook with ISBN: " << userISBN << "\ndoes not exist." << endl;
+    }
+}
