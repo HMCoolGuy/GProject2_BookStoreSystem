@@ -65,7 +65,6 @@ int main() {
 			}
 
 			break;
-
 		case 2: // If user has selected 2 (Search for an existing book)
 
 			// Confirm the inventory is not empty
@@ -80,6 +79,7 @@ int main() {
 				cout << "3) Genre" << endl;
 				cout << "4) ISBN" << endl;
 				cout << "5) Go back" << endl;
+
 				
 				// Prompt user for input
 				cout << "Please enter a valid number: ";
@@ -91,38 +91,51 @@ int main() {
 					cout << "Please enter a valid number: ";
 					cin >> userInt;
 				}
-
+	
 				switch (userInt) {
-				case 1: // Searching through title
-					cout << "TODO: search through title" << endl;
-					break;
-				case 2: // Searching through Author
-					cout << "TODO: search through author" << endl;
-					break;
-				case 3: // Searching through Genre
-					cout << "TODO: search through genre" << endl;
-					break;
-				case 4: // Searching through ISBN
-					cout << "Enter ISBN of book to search for: ";
-					cin.ignore();
-					getline(cin, userString[3]); // Store the ISBN into index 3 of userString
+					case 1: // Searching through title
+						cout << "Enter title of book to search for: ";
+						cin.ignore();
+						getline(cin, userString[0]); // Store the title of the Book into index 0 of userString
 
-					specificBook = bookInv.searchByISBN(userString[3]); // Search for the book through its ISBN
+						specificBook = bookInv.searchByTitle(userString[0]); // Search for the book through its title
+	
+						bookInv.findBook(bookInv, specificBook); // Check if the books exists or not
 
-					cout << endl;
-					if (specificBook == nullptr) {	// Confirm that the book exists
-						cout << "This book is not in inventory." << endl;
+						break;
+					case 2: // Searching through Author
+						cout << "Enter Author of book to search for: ";
+						cin.ignore();
+						getline(cin, userString[1]); // Store the Author of the book into index 1 of userString
+				
+						specificBook = bookInv.searchByAuthor(userString[1]); // Search for the book through its Author
+
+						bookInv.findBook(bookInv, specificBook); // Check if the books exists or not
+
+						break;
+					case 3: // Searching through Genre
+						cout << "Enter Genre of book to search for: ";
+						cin.ignore();
+						getline(cin, userString[2]); // Store the Genre into index 2 of userString
+
+						specificBook = bookInv.searchByGenre(userString[2]); // Search for the book through its Genre
+
+						bookInv.findBook(bookInv, specificBook); // Check if the books exists or not
+
+						break;
+					case 4: // Searching through ISBN
+						cout << "Enter ISBN of book to search for: ";
+						cin.ignore();
+						getline(cin, userString[3]); // Store the ISBN into index 3 of userString
+				
+						specificBook = bookInv.searchByISBN(userString[3]); // Search for the book through its ISBN
+
+						bookInv.findBook(bookInv, specificBook); // Check if the books exists or not
+
+					case 5: // Going back to the main menu
+						break;
 					}
-					else {  // Display the book's information
-						cout << "Book Found!" << endl << "=================" << endl;
-						bookInv.printBook(specificBook);
-					}
-					cout << endl;
-
-				case 5: // Going back to the main menu
-					break;
 				}
-			}
 			break;
 
 		case 3: // If user has selected 3 (Add a book)

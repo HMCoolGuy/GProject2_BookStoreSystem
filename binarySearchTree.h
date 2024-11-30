@@ -55,6 +55,17 @@ public:
     void orderBook();
     // A function  that let the user order a book
 
+    nodeType<elemType>* searchByTitle(const elemType& searchItem) const;
+    // A function to locate a book through the book's title.
+
+    nodeType<elemType>* searchByAuthor(const elemType& searchItem) const;
+    // A function to search the tree for the author of the book.
+
+    nodeType<elemType>* searchByGenre(const elemType& searchItem) const;
+    // A function used to find the located genre of the book in the tree.
+
+    void findBook(const bSearchTreeType<elemType>& p, nodeType<elemType>* specificBook);
+    // Checks if the books exists in the inventory
 
 private:
 
@@ -71,8 +82,18 @@ private:
     nodeType<elemType>* searchISBN (nodeType<elemType>* p, const elemType& searchItem) const;
     // A helper function used to navigate where the located ISBN is in the entire tree.
 
+    nodeType<elemType>* searchTitle(nodeType<elemType>* p, const elemType& searchItem) const;
+    // A helper function that supports the searchByTitle function.
+    
+    nodeType<elemType>* searchAuthor(nodeType<elemType>* p, const elemType& searchItem) const;
+    // A helper function used to locate where the title of the book is in the tree.
+
+    nodeType<elemType>* searchGenre(nodeType<elemType>* p, const elemType& searchItem) const;
+    // A helper function used to assist the searchByGenre function.
+    
     vector<genreType> getGenres(nodeType<elemType>* p, vector<genreType>& genreList);
     // A helper function to get genres within the inventory based off of their popularity
+
 };
 
 
@@ -348,6 +369,19 @@ bool bSearchTreeType<T>::checkLesser(string str1, string str2) {
 }
 
 template <class elemType>
+void bSearchTreeType<elemType>::findBook(const bSearchTreeType<elemType>& p, nodeType<elemType>* specificBook) {
+    cout << endl;
+    if (specificBook == nullptr) {	// Confirm that the book exists
+        cout << "This book is not in inventory." << endl;
+    }
+    else {  // Display the book's information
+        cout << "Book Found!" << endl << "=================" << endl;
+        p.printBook(specificBook);
+    }
+    cout << endl;
+}
+
+template <class elemType>
 nodeType<elemType>* bSearchTreeType<elemType>::searchByISBN (const elemType& searchItem) const { // Search the tree that contains the located IBSN.
 	// Call the helper function searchISBN to search for the located ISBN.
 	return searchISBN(this->root, searchItem);
@@ -372,6 +406,77 @@ nodeType<elemType>* bSearchTreeType<elemType>::searchISBN (nodeType<elemType>* p
 }//end searchISBN
 
 template <class elemType>
+nodeType<elemType>* bSearchTreeType<elemType>::searchByTitle(const elemType& searchItem) const { // Searchs the tree for the located title of the book.
+    // Call the helper function searchTitle to nagivate for the title of the book.
+    return searchTitle(this->root, searchItem);
+}// searchByTitle
+
+template <class elemType>
+nodeType<elemType>* bSearchTreeType<elemType>::searchTitle(nodeType<elemType>* p, const elemType& searchItem) const { // A helper function that supports the searchByTitle function
+    if (p == nullptr) // Check if the node is empty.
+        return nullptr;
+
+    // Base Case: Check the current node is equal to the located title.
+    if (p->info == searchItem)
+        return p;
+
+    // Base Case: Traverse the left substree
+    nodeType<elemType>* leftNode = searchTitle(p->lLink, searchItem);
+    if (leftNode != nullptr)
+        return leftNode;
+
+    // Recursive Case: Traverse the right substree
+    return searchTitle(p->rLink, searchItem);
+}//end searchTitle
+
+template <class elemType>
+nodeType<elemType>* bSearchTreeType<elemType>::searchByAuthor(const elemType& searchItem) const { // Searchs the tree for the author of the book.
+    // Call the helper function searchAuthor to search for the author of the book.
+    return searchAuthor(this->root, searchItem);
+}// searchByAuthor
+
+template <class elemType>
+nodeType<elemType>* bSearchTreeType<elemType>::searchAuthor(nodeType<elemType>* p, const elemType& searchItem) const { // A helper function that supports the searchByAuthor function
+    if (p == nullptr) // Check if the node is empty.
+        return nullptr;
+
+    // Base Case: Check the current node is equal to the located author.
+    if (p->author == searchItem)
+        return p;
+
+    // Base Case: Traverse the left substree
+    nodeType<elemType>* leftNode = searchAuthor(p->lLink, searchItem);
+    if (leftNode != nullptr)
+        return leftNode;
+
+    // Recursive Case: Traverse the right substree
+    return searchAuthor(p->rLink, searchItem);
+}//end searchAuthor
+
+template <class elemType>
+nodeType<elemType>* bSearchTreeType<elemType>::searchByGenre(const elemType& searchItem) const { // Finds the located genre of the book in the tree.
+    // Call the helper function searchGenre to look for the genre of the book.
+    return searchGenre(this->root, searchItem);
+}// searchByGenre
+
+template <class elemType>
+nodeType<elemType>* bSearchTreeType<elemType>::searchGenre(nodeType<elemType>* p, const elemType& searchItem) const { // A helper function used to assist the searchByGenre function
+    if (p == nullptr) // Check if the node is empty.
+        return nullptr;
+
+    // Base Case: Check the current node is equal to the located genre.
+    if (p->genre == searchItem)
+        return p;
+
+    // Base Case: Traverse the left substree
+    nodeType<elemType>* leftNode = searchGenre(p->lLink, searchItem);
+    if (leftNode != nullptr)
+        return leftNode;
+
+    // Recursive Case: Traverse the right substree
+    return searchGenre(p->rLink, searchItem);
+}//end searchGenre
+
 void bSearchTreeType<elemType>::showPopularGenres() {
     vector<genreType> genreList; // List of genres and the amount of books under them
 
@@ -435,7 +540,6 @@ vector<genreType> bSearchTreeType<elemType>::getGenres(nodeType<elemType>* p, ve
     // Return the list of genres and their book counts
     return genreList;
 }
-#endif
 
 template <class elemType>
 void bSearchTreeType<elemType>::orderBook() {
@@ -491,3 +595,5 @@ void bSearchTreeType<elemType>::orderBook() {
         cout << "\nBook with ISBN: " << userISBN << "\ndoes not exist." << endl;
     }
 }
+
+#endif
