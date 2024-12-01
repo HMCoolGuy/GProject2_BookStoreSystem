@@ -477,6 +477,7 @@ nodeType<elemType>* bSearchTreeType<elemType>::searchGenre(nodeType<elemType>* p
     return searchGenre(p->rLink, searchItem);
 }//end searchGenre
 
+template <class elemType>
 void bSearchTreeType<elemType>::showPopularGenres() {
     vector<genreType> genreList; // List of genres and the amount of books under them
 
