@@ -18,8 +18,9 @@ int main() {
 
 	bSearchTreeType<string> bookInv;	// Contains books as nodes in the binary search tree
 	nodeType<string>* specificBook;     // Singular book node used for searching for a book
-	int userInt = 0;					// Allows the user to input a number
+	int userInt = 0;				// Allows the user to input a number
 	string userString[4];				// Allows the user to input strings
+	int count = 0;					// Counts how many books that have either same title, author, or genre in the inventory.
 
 	cout << "** BOOKSTORE INVENTORY SYSTEM **" << endl;
 	// Begin while loop that will only exit if the user chooses to do so
