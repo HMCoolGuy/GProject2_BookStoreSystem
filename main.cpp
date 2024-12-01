@@ -98,9 +98,9 @@ int main() {
 						cin.ignore();
 						getline(cin, userString[0]); // Store the title of the Book into index 0 of userString
 
-						specificBook = bookInv.searchByTitle(userString[0]); // Search for the book through its title
-	
-						bookInv.findBook(bookInv, specificBook); // Check if the books exists or not
+						bookInv.printByTitle(userString[0], count); // Search and print for book(s) under the same title.
+
+						bookInv.isBookFound(userString[0], userInt, count); // Check how many books under the same title.
 
 						break;
 					case 2: // Searching through Author
@@ -108,9 +108,9 @@ int main() {
 						cin.ignore();
 						getline(cin, userString[1]); // Store the Author of the book into index 1 of userString
 				
-						specificBook = bookInv.searchByAuthor(userString[1]); // Search for the book through its Author
+						bookInv.printByAuthor(userString[1], count); // Search and print for book(s) under the same author(s).
 
-						bookInv.findBook(bookInv, specificBook); // Check if the books exists or not
+						bookInv.isBookFound(userString[1], userInt, count); // Check how many books under the same author(s).
 
 						break;
 					case 3: // Searching through Genre
@@ -118,9 +118,9 @@ int main() {
 						cin.ignore();
 						getline(cin, userString[2]); // Store the Genre into index 2 of userString
 
-						specificBook = bookInv.searchByGenre(userString[2]); // Search for the book through its Genre
+						bookInv.printByGenre(userString[2], count); // Search and print for book(s) under the same genre.
 
-						bookInv.findBook(bookInv, specificBook); // Check if the books exists or not
+						bookInv.isBookFound(userString[2], userInt, count); // Check how many books under the same genre.
 
 						break;
 					case 4: // Searching through ISBN
