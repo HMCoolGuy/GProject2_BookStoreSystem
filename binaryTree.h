@@ -18,6 +18,7 @@ struct nodeType
     string ISBN; // ISBN of the book
     int quantity; // Quantity of book in the store
     int sales = 0;  // Amount of times a book has been sold
+    int height = 0; // The height of a node in the binary tree
 
     nodeType<elemType>* lLink;
     nodeType<elemType>* rLink;
