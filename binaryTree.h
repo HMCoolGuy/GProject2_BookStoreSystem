@@ -44,7 +44,7 @@ public:
     //Postcondition: Returns true if the binary tree is empty;
     //               otherwise, returns false.
 
-    void inorderTraversal() const;
+    void displayInventory() const;
     //Function to do an inorder traversal of the binary tree.
     //Postcondition: Nodes are printed in inorder sequence.
 
@@ -78,18 +78,11 @@ public:
     //               is deallocated.
     //               root = nullptr;
 
-    virtual bool search(const elemType& searchItem) const = 0;
-    //Function to determine if searchItem is in the binary 
-    //tree.
-    //Postcondition: Returns true if searchItem is found in 
-    //               the binary tree; otherwise, returns 
-    //               false.
-
     virtual void insert
     (const string& insertTitle, const string& insertAuthor, const string& insertGenre, const string& insertISBN, const int& insertQuantity) = 0;
     //Function to insert insertItem in the binary tree.
     //Postcondition: If there is no node in the binary tree
-    //               that has the same info as insertItem, a
+    //               that has the same ISBN as insertItem, a
     //               node with the info insertItem is created
     //               and inserted in the binary search tree.
 
@@ -102,13 +95,13 @@ public:
     //               deleteItem is not in the binary tree, 
     //               an appropriate message is printed.
 
-    void setInfo
-    (string& userTitle, string& userAuthor, string& userGenre, string& userISBN, int& userNum);
-    // A function to get a new title, author, genre, ISBN, and quantity from the user
-
     void printBook(nodeType<elemType>* p) const;
     // Function to print a given book node's information
     // (Title, Author, Genre, ISBN, and Quantity).
+
+    void setInfo
+    (string& userTitle, string& userAuthor, string& userGenre, string& userISBN, int& userNum);
+    // A function to get a new title, author, genre, ISBN, and quantity from the user
 
     void addToHistory(nodeType<elemType> p);
     // Function to add a book to the order history
@@ -217,7 +210,7 @@ bool binaryTreeType<elemType>::isEmpty() const
 }
 
 template <class elemType>
-void binaryTreeType<elemType>::inorderTraversal() const
+void binaryTreeType<elemType>::displayInventory() const
 {
     inorder(root);
 }
@@ -406,6 +399,22 @@ int binaryTreeType<elemType>::leavesCount(nodeType<elemType>* p) const
             return leavesCount(p->lLink) + leavesCount(p->rLink);
 }
 
+template<class elemType>
+void binaryTreeType<elemType>::printBook(nodeType<elemType>* p) const {
+    // Print the book title
+    cout << p->info << " | ";
+    // Print the book author
+    cout << "Author(s): " << p->author << " | ";
+    // Print the book genre
+    cout << "Genre: " << p->genre << " | ";
+    // Print the book ISBN
+    cout << "ISBN: " << p->ISBN << " | ";
+    // Print the quantity of the book
+    cout << "Quantity: " << p->quantity << " | ";
+    // Print the quantity of the book
+    cout << "Sales: " << p->sales << endl;
+}
+
 template <class elemType>
 void binaryTreeType<elemType>::setInfo // Function that gets new book info from the user
 (string& userTitle, string& userAuthor, string& userGenre, string& userISBN, int& userNum) {
@@ -439,22 +448,6 @@ void binaryTreeType<elemType>::setInfo // Function that gets new book info from 
         cin.ignore();
         cin >> userNum;				 // Store the quantity of the book within userString
     }
-}
-
-template<class elemType>
-void binaryTreeType<elemType>::printBook(nodeType<elemType>* p) const {
-    // Print the book title
-    cout << p->info << " | ";
-    // Print the book author
-    cout << "Author(s): " << p->author << " | ";
-    // Print the book genre
-    cout << "Genre: " << p->genre << " | ";
-    // Print the book ISBN
-    cout << "ISBN: " << p->ISBN << " | ";
-    // Print the quantity of the book
-    cout << "Quantity: " << p->quantity << " | ";
-    // Print the quantity of the book
-    cout << "Sales: " << p->sales << endl;
 }
 
 template<class elemType>
@@ -503,7 +496,5 @@ template<class elemType>
 int binaryTreeType<elemType>::getAllSalesTotal() const {
     return totalSales;
 }
-
-
 
 #endif

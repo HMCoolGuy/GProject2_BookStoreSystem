@@ -60,7 +60,8 @@ int main() {
 			}
 			else {
 				cout << "CURRENT INVENTORY" << endl << "=================" << endl;
-				bookInv.inorderTraversal();
+				bookInv.displayInventory();
+				bookInv.preorderTraversal();
 				
 				cout << endl;
 			}
