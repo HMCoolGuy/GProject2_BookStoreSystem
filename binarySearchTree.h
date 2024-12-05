@@ -81,6 +81,12 @@ public:
     void printByGenre(const elemType& searchItem, int& count);
     // A function to print books out that have same genre in the inventory.
 
+    int getHeight(const nodeType<elemType>* p) const;
+    // A function to return the node's height.
+
+    void balancingTree(nodeType<elemType>* p);
+    // A function used to balance the nodes of a binary search tree.
+
 private:
 
     void deleteFromTree(nodeType<elemType>*& p);
@@ -115,6 +121,9 @@ private:
 
     void printGenre(nodeType<elemType>* p, const elemType& searchItem, int& count);
     // A helper function to assist the printByGenre function.
+
+    int getBalanceFactor(nodeType<elemType>* p);
+    // A helper function used to return the node's balance factor.
     
     vector<genreType> getGenres(nodeType<elemType>* p, vector<genreType>& genreList);
     // A helper function to get genres within the inventory based off of their popularity
@@ -618,6 +627,47 @@ void bSearchTreeType<elemType>::printGenre(nodeType<elemType>* p, const elemType
         // Traverse the right substree.
         printGenre(p->rLink, searchItem, count);
     }
+}
+
+template <class elemType>
+int bSearchTreeType<elemType>::getHeight(const nodeType<elemType>* p){ // returns the node's height.
+	// Check if the node is empty first.
+	if(p == nullptr)
+		return -1;
+	
+	return p->height;
+}
+
+template <class elemType>
+int bSearchTreeType<elemType>::getBalanceFactor(nodeType<elemType>* p){ // Returns the node's balance factor.
+	// Check if the node is empty.
+	if (p == nullptr){
+		return 0;
+	}
+
+	return (height(p->lLink) - height(p->rLink));
+}
+
+template <class elemType>
+void bSearchTreeType<elemType>::balancingTree(nodeType<elemType>* p){ // A function used to balance the nodes of a binary search tree.
+	// Call the helper fucntion getBalanceFactor to store the node's balancing factor.
+	int balanceFactor = getBalanceFactor(p);
+
+	
+	if(balanceFactor > 1){ // If the balanceFactor is greater than 1, perform a right rotation.
+		// Perform a left-right rotation if the node's left substree's balanceFactor is less than 0.
+		if(getBalanceFactor(p->lLink) < 0)
+			cout << "TODO: Add a function to perform left rotation." << endl;
+
+		cout << "TODO: Add a function to perform right rotation." << endl;
+	}
+	else if(balanceFactor < -1){ // If the balanceFactor is less than -1, perform a left rotation.
+		// Perform a right-left rotation if the node's right substree's balanceFactor is greater than 0.
+		if(getBalanceFactor(p->rLink) < 0)
+			cout << "TODO: Add a function to perform left rotation." << endl;
+
+		cout << "TODO: Add a function to perform right rotation." << endl;
+	}
 }
 
 template <class elemType>
