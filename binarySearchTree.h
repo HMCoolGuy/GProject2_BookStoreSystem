@@ -200,16 +200,11 @@ template <class elemType>
 nodeType<elemType>* bSearchTreeType<elemType>::insertHelper
 (nodeType<elemType>* p, const string& insertTitle, const string& insertAuthor, const string& insertGenre, const string& insertISBN, const int& insertQuantity)
 {
-    nodeType<elemType>* current; //pointer to traverse the tree
-    nodeType<elemType>* trailCurrent = nullptr; //pointer
-    //behind current
-    nodeType<elemType>* newNode;  //pointer to create the node
-
-    newNode = new nodeType<elemType>;
-
-
-    // Setup the information for the book
+    // Base Case (if the current node being pointed at is where the new node needs to be)
     if (p == nullptr) {
+        // Create the new node
+        nodeType<elemType>* newNode = new nodeType<elemType>;
+
         newNode->info = insertTitle;     // Set the new book's title
         newNode->author = insertAuthor; // Set the new book's author
         newNode->genre = insertGenre;   // Set the new book's genre
@@ -217,62 +212,28 @@ nodeType<elemType>* bSearchTreeType<elemType>::insertHelper
         newNode->quantity = insertQuantity; // Set the quantity of this book
         newNode->lLink = nullptr;
         newNode->rLink = nullptr;
+
+        // Return the new node
         return newNode;
     }
 
-    /*
-    // Node is sorted alphabetically (Where A has highest root priority, and z is lowest priority)
-    if (p == nullptr)
-        return newNode;
-    else
-    {
-        current = p;
-
-        while (current != nullptr)
-        {
-            trailCurrent = current;
-
-            if (current->ISBN == insertISBN) // ISBN's are compared to make sure no duplicate books are added
-            {
-                cout << "This book is already in the inventory!" << endl;
-                return current;
-            }
-
-            // Iterate through each character of both the string to determine order
-            if (checkLesser(current->info, insertTitle)) {
-                // If mismatching insert character is lesser than current string character
-                current = current->lLink;
-            }
-            else {
-                // If mismatching insert character is greater than current string character
-                current = current->rLink;
-            }
-        }//end while
-
-        // Determine which direction the previous node should point to for the new node
-        if (checkLesser(trailCurrent->info, insertTitle)) {
-            // If character of insert string goes before previous string's character, point lLink of previous node to the new node
-            trailCurrent->lLink = newNode;
-        }
-        else {
-            // If character of insert string goes after previous string's character, point rLink of previous node to the new node
-            trailCurrent->rLink = newNode;
-        }
-    }
-
-    */
+    // Ensure the book is not already in the inventory
     if (p->ISBN == insertISBN) {
         cout << "This book is already in the inventory!" << endl;
         return p;
     }
 
+    // Determine where to put the newNode
     if (checkLesser(p->info, insertTitle)) {
+        // If the title goes alphabetically before the current node's title, go to the lLink
         p->lLink = insertHelper(p->lLink, insertTitle, insertAuthor, insertGenre, insertISBN, insertQuantity);
     }
     else {
+        // If the title goes alphabetically after the current node's title, go to the rLink
         p->rLink = insertHelper(p->rLink, insertTitle, insertAuthor, insertGenre, insertISBN, insertQuantity);
     }
 
+    // Make sure that each node's balance factor is correct, and that the tree is balanced
     return balanceTree(p);
 
 }//end insert
@@ -689,52 +650,51 @@ int bSearchTreeType<elemType>::getBalanceFactor(nodeType<elemType>* p){ // Retur
 
 template <class elemType>
 nodeType<elemType>* bSearchTreeType<elemType>::rotateRight(nodeType<elemType>* p) {
-    nodeType<elemType>* leftNode = p->lLink;
-    nodeType<elemType>* childRightNode = leftNode->rLink;
+    nodeType<elemType>* leftNode = p->lLink;                // Node that will become the new parent
+    nodeType<elemType>* childRightNode = leftNode->rLink;   // Node that will become the new lLink of leftNode (if it exists)
 
     // Rotate the nodes
-    leftNode->rLink = p;
-    p->lLink = childRightNode;
+    leftNode->rLink = p;        // Set the left node's (the new parent) rLink to point to p (the previous parent)
+    p->lLink = childRightNode;  // Set the rLink of the leftNode to become the lLink of the leftNode (if it exists)
 
     // Update height for each node
-    p->height = 1 + findMax(getHeight(p->lLink), getHeight(p->rLink));
+    p->height = 1 + findMax(getHeight(p->lLink), getHeight(p->rLink));  // Determine the height of the rLink of leftNode
+    leftNode->height = 1 + findMax(getHeight(leftNode->lLink), getHeight(leftNode->rLink)); // determine the height of leftNode
 
-    leftNode->height = 1 + findMax(getHeight(leftNode->lLink), getHeight(leftNode->rLink));
-
-    return leftNode;
+    return leftNode;    // Return the new parent, leftNode
 }
 
 template <class elemType>
 nodeType<elemType>* bSearchTreeType<elemType>::rotateLeft(nodeType<elemType>* p) {
-    nodeType<elemType>* rightNode = p->rLink;
-    nodeType<elemType>* childLeftNode = rightNode->lLink;
+    nodeType<elemType>* rightNode = p->rLink;   // Node that will become the new parent 
+    nodeType<elemType>* childLeftNode = rightNode->lLink;   // Node that will become the new lLink of leftNode (if it exists)
 
     // Rotate the nodes
-    rightNode->lLink = p;
-    p->rLink = childLeftNode;
+    rightNode->lLink = p;       // Set the right node's (new parent) lLink to point to p (previous parent)
+    p->rLink = childLeftNode;   // Set the lLink of the rightNode to become the rLink of the rightNode (if it exists)
 
     // Update height for each node
-    p->height = 1 + findMax(getHeight(p->lLink), getHeight(p->rLink));
+    p->height = 1 + findMax(getHeight(p->lLink), getHeight(p->rLink));  // Determine the height of the lLink of rightNode
+    rightNode->height = 1 + findMax(getHeight(rightNode->lLink), getHeight(rightNode->rLink));  // determine the height of rightNode
 
-    rightNode->height = 1 + findMax(getHeight(rightNode->lLink), getHeight(rightNode->rLink));
-
-    return rightNode;
+    return rightNode;       // Return the new parent, rightNode
 }
 
 template <class elemType>
 nodeType<elemType>* bSearchTreeType<elemType>::balanceTree(nodeType<elemType>* p) { // A function used to balance the nodes of a binary search tree.
-
-    if (p == nullptr) {
+    if (p == nullptr) {    // Base case
         return p;
     }
 
-    p->height = 1 + findMax(getHeight(p->lLink), getHeight(p->rLink));
+    // Set the height of the current node to be the maximum of the heights of either lLink or rLink
+    p->height = 1 + findMax(getHeight(p->lLink), getHeight(p->rLink)); 
 
+    // Determine the balancing factor of the current node
     int balanceFactor = getBalanceFactor(p);
 
-
-    if (balanceFactor > 1) { // If the balanceFactor is greater than 1, perform a right rotation.
-        // Perform a left-right rotation if the node's left substree's balanceFactor is less than 0.
+    // If the balanceFactor is greater than 1, perform a right rotation.
+    if (balanceFactor > 1) { 
+        // Perform a left-right rotation if the node's left subtree's balanceFactor is less than 0.
         if (getBalanceFactor(p->lLink) < 0) {
             cout << "Left Rotation" << endl;
             p->lLink = rotateLeft(p->lLink);
@@ -742,17 +702,17 @@ nodeType<elemType>* bSearchTreeType<elemType>::balanceTree(nodeType<elemType>* p
         }
         cout << "Right Rotation" << endl;
         return rotateRight(p);
-
     }
-    else if (balanceFactor < -1) { // If the balanceFactor is less than -1, perform a left rotation.
-        // Perform a right-left rotation if the node's right substree's balanceFactor is greater than 0.
+
+    // If the balanceFactor is less than -1, perform a left rotation.
+    else if (balanceFactor < -1) { 
+        // Perform a right-left rotation if the node's right subtree's balanceFactor is greater than 0.
         if (getBalanceFactor(p->rLink) > 0) {
             cout << "Right Rotation" << endl;
             p->rLink = rotateRight(p->rLink);
         }
         cout << "Left Rotation" << endl;
         return rotateLeft(p);
-
     }
 
     return p;
