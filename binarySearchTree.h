@@ -84,10 +84,14 @@ public:
     int getHeight(const nodeType<elemType>* p) const;
     // A function to return the node's height.
 
-    void balancingTree(nodeType<elemType>* p);
+    nodeType<elemType>* balanceTree(nodeType<elemType>* p);
     // A function used to balance the nodes of a binary search tree.
+       
 
 private:
+    nodeType<elemType>* insertHelper 
+    (nodeType<elemType>* p, const string& insertTitle, const string& insertAuthor, const string& insertGenre, const string& insertISBN, const int& insertQuantity);
+    // Helper function to insert an item into the tree
 
     void deleteFromTree(nodeType<elemType>*& p);
     //Function to delete the node to which p points is
@@ -127,6 +131,15 @@ private:
     
     vector<genreType> getGenres(nodeType<elemType>* p, vector<genreType>& genreList);
     // A helper function to get genres within the inventory based off of their popularity
+
+    nodeType<elemType>* rotateRight(nodeType<elemType>* p);
+    // A private function to rotate a current node to the right
+
+    nodeType<elemType>* rotateLeft(nodeType<elemType>* p);
+    // A private function to rotate a current node to the left
+
+    int findMax(int num1, int num2);
+    // A function to find the maximum of two numbers
 
 };
 
@@ -180,6 +193,13 @@ template <class elemType>
 void bSearchTreeType<elemType>::insert
 (const string& insertTitle, const string& insertAuthor, const string& insertGenre, const string& insertISBN, const int& insertQuantity)
 {
+    this->root = insertHelper(this->root, insertTitle, insertAuthor, insertGenre, insertISBN, insertQuantity);
+}
+
+template <class elemType>
+nodeType<elemType>* bSearchTreeType<elemType>::insertHelper
+(nodeType<elemType>* p, const string& insertTitle, const string& insertAuthor, const string& insertGenre, const string& insertISBN, const int& insertQuantity)
+{
     nodeType<elemType>* current; //pointer to traverse the tree
     nodeType<elemType>* trailCurrent = nullptr; //pointer
     //behind current
@@ -189,20 +209,24 @@ void bSearchTreeType<elemType>::insert
 
 
     // Setup the information for the book
-    newNode->info = insertTitle;     // Set the new book's title
-    newNode->author = insertAuthor; // Set the new book's author
-    newNode->genre = insertGenre;   // Set the new book's genre
-    newNode->ISBN = insertISBN;     // Set the new book's ISBN
-    newNode->quantity = insertQuantity; // Set the quantity of this book
-    newNode->lLink = nullptr;
-    newNode->rLink = nullptr;
+    if (p == nullptr) {
+        newNode->info = insertTitle;     // Set the new book's title
+        newNode->author = insertAuthor; // Set the new book's author
+        newNode->genre = insertGenre;   // Set the new book's genre
+        newNode->ISBN = insertISBN;     // Set the new book's ISBN
+        newNode->quantity = insertQuantity; // Set the quantity of this book
+        newNode->lLink = nullptr;
+        newNode->rLink = nullptr;
+        return newNode;
+    }
 
+    /*
     // Node is sorted alphabetically (Where A has highest root priority, and z is lowest priority)
-    if (this->root == nullptr)
-        this->root = newNode;
+    if (p == nullptr)
+        return newNode;
     else
     {
-        current = this->root;
+        current = p;
 
         while (current != nullptr)
         {
@@ -211,13 +235,13 @@ void bSearchTreeType<elemType>::insert
             if (current->ISBN == insertISBN) // ISBN's are compared to make sure no duplicate books are added
             {
                 cout << "This book is already in the inventory!" << endl;
-                return;
+                return current;
             }
-    
+
             // Iterate through each character of both the string to determine order
             if (checkLesser(current->info, insertTitle)) {
                 // If mismatching insert character is lesser than current string character
-                current = current->lLink; 
+                current = current->lLink;
             }
             else {
                 // If mismatching insert character is greater than current string character
@@ -226,7 +250,7 @@ void bSearchTreeType<elemType>::insert
         }//end while
 
         // Determine which direction the previous node should point to for the new node
-        if (checkLesser(trailCurrent->info, insertTitle)) { 
+        if (checkLesser(trailCurrent->info, insertTitle)) {
             // If character of insert string goes before previous string's character, point lLink of previous node to the new node
             trailCurrent->lLink = newNode;
         }
@@ -235,6 +259,21 @@ void bSearchTreeType<elemType>::insert
             trailCurrent->rLink = newNode;
         }
     }
+
+    */
+    if (p->ISBN == insertISBN) {
+        cout << "This book is already in the inventory!" << endl;
+        return p;
+    }
+
+    if (checkLesser(p->info, insertTitle)) {
+        p->lLink = insertHelper(p->lLink, insertTitle, insertAuthor, insertGenre, insertISBN, insertQuantity);
+    }
+    else {
+        p->rLink = insertHelper(p->rLink, insertTitle, insertAuthor, insertGenre, insertISBN, insertQuantity);
+    }
+
+    return balanceTree(p);
 
 }//end insert
 
@@ -630,7 +669,7 @@ void bSearchTreeType<elemType>::printGenre(nodeType<elemType>* p, const elemType
 }
 
 template <class elemType>
-int bSearchTreeType<elemType>::getHeight(const nodeType<elemType>* p){ // returns the node's height.
+int bSearchTreeType<elemType>::getHeight(const nodeType<elemType>* p) const { // returns the node's height.
 	// Check if the node is empty first.
 	if(p == nullptr)
 		return -1;
@@ -645,29 +684,78 @@ int bSearchTreeType<elemType>::getBalanceFactor(nodeType<elemType>* p){ // Retur
 		return 0;
 	}
 
-	return (height(p->lLink) - height(p->rLink));
+	return (getHeight(p->lLink) - getHeight(p->rLink));
 }
 
 template <class elemType>
-void bSearchTreeType<elemType>::balancingTree(nodeType<elemType>* p){ // A function used to balance the nodes of a binary search tree.
-	// Call the helper fucntion getBalanceFactor to store the node's balancing factor.
-	int balanceFactor = getBalanceFactor(p);
+nodeType<elemType>* bSearchTreeType<elemType>::rotateRight(nodeType<elemType>* p) {
+    nodeType<elemType>* leftNode = p->lLink;
+    nodeType<elemType>* childRightNode = leftNode->rLink;
 
-	
-	if(balanceFactor > 1){ // If the balanceFactor is greater than 1, perform a right rotation.
-		// Perform a left-right rotation if the node's left substree's balanceFactor is less than 0.
-		if(getBalanceFactor(p->lLink) < 0)
-			cout << "TODO: Add a function to perform left rotation." << endl;
+    // Rotate the nodes
+    leftNode->rLink = p;
+    p->lLink = childRightNode;
 
-		cout << "TODO: Add a function to perform right rotation." << endl;
-	}
-	else if(balanceFactor < -1){ // If the balanceFactor is less than -1, perform a left rotation.
-		// Perform a right-left rotation if the node's right substree's balanceFactor is greater than 0.
-		if(getBalanceFactor(p->rLink) < 0)
-			cout << "TODO: Add a function to perform left rotation." << endl;
+    // Update height for each node
+    p->height = 1 + findMax(getHeight(p->lLink), getHeight(p->rLink));
 
-		cout << "TODO: Add a function to perform right rotation." << endl;
-	}
+    leftNode->height = 1 + findMax(getHeight(leftNode->lLink), getHeight(leftNode->rLink));
+
+    return leftNode;
+}
+
+template <class elemType>
+nodeType<elemType>* bSearchTreeType<elemType>::rotateLeft(nodeType<elemType>* p) {
+    nodeType<elemType>* rightNode = p->rLink;
+    nodeType<elemType>* childLeftNode = rightNode->lLink;
+
+    // Rotate the nodes
+    rightNode->lLink = p;
+    p->rLink = childLeftNode;
+
+    // Update height for each node
+    p->height = 1 + findMax(getHeight(p->lLink), getHeight(p->rLink));
+
+    rightNode->height = 1 + findMax(getHeight(rightNode->lLink), getHeight(rightNode->rLink));
+
+    return rightNode;
+}
+
+template <class elemType>
+nodeType<elemType>* bSearchTreeType<elemType>::balanceTree(nodeType<elemType>* p) { // A function used to balance the nodes of a binary search tree.
+
+    if (p == nullptr) {
+        return p;
+    }
+
+    p->height = 1 + findMax(getHeight(p->lLink), getHeight(p->rLink));
+
+    int balanceFactor = getBalanceFactor(p);
+
+
+    if (balanceFactor > 1) { // If the balanceFactor is greater than 1, perform a right rotation.
+        // Perform a left-right rotation if the node's left substree's balanceFactor is less than 0.
+        if (getBalanceFactor(p->lLink) < 0) {
+            cout << "Left Rotation" << endl;
+            p->lLink = rotateLeft(p->lLink);
+
+        }
+        cout << "Right Rotation" << endl;
+        return rotateRight(p);
+
+    }
+    else if (balanceFactor < -1) { // If the balanceFactor is less than -1, perform a left rotation.
+        // Perform a right-left rotation if the node's right substree's balanceFactor is greater than 0.
+        if (getBalanceFactor(p->rLink) > 0) {
+            cout << "Right Rotation" << endl;
+            p->rLink = rotateRight(p->rLink);
+        }
+        cout << "Left Rotation" << endl;
+        return rotateLeft(p);
+
+    }
+
+    return p;
 }
 
 template <class elemType>
@@ -787,6 +875,16 @@ void bSearchTreeType<elemType>::orderBook() {
     }
     else {
         cout << "\nBook with ISBN: " << userISBN << "\ndoes not exist." << endl;
+    }
+}
+
+template <class elemType>
+int bSearchTreeType<elemType>::findMax(int num1, int num2) {
+    if (num1 > num2) {
+        return num1;
+    }
+    else {
+        return num2;
     }
 }
 

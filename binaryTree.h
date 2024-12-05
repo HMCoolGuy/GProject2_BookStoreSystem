@@ -44,7 +44,7 @@ public:
     //Postcondition: Returns true if the binary tree is empty;
     //               otherwise, returns false.
 
-    void inorderTraversal() const;
+    void displayInventory() const;
     //Function to do an inorder traversal of the binary tree.
     //Postcondition: Nodes are printed in inorder sequence.
 
@@ -217,7 +217,7 @@ bool binaryTreeType<elemType>::isEmpty() const
 }
 
 template <class elemType>
-void binaryTreeType<elemType>::inorderTraversal() const
+void binaryTreeType<elemType>::displayInventory() const
 {
     inorder(root);
 }
