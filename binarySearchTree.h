@@ -53,8 +53,6 @@ public:
     // A function that let the user order a book
 
 private:
-    nodeType<elemType>* searchISBN(nodeType<elemType>* p, const elemType& searchItem) const;
-    // A helper function used to navigate where the located ISBN is in the entire tree.
 
     void printTitle(nodeType<elemType>* p, const elemType& searchItem, int& count);
     // A helper function to support the printByTitle function.
@@ -64,6 +62,9 @@ private:
 
     void printGenre(nodeType<elemType>* p, const elemType& searchItem, int& count);
     // A helper function to assist the printByGenre function.
+
+    nodeType<elemType>* searchISBN(nodeType<elemType>* p, const elemType& searchItem) const;
+    // A helper function used to navigate where the located ISBN is in the entire tree.
 
     bool checkLesser(string str1, string str2);
     // Function to check for which string is lesser than the other
@@ -146,30 +147,6 @@ void bSearchTreeType<elemType>::isBookFound(const elemType& searchItem, const in
         cout << "There exists " << count << " book(s) " << searchCategory << " " << searchItem << " in the inventory" << endl;
     }
 }
-
-template <class elemType>
-nodeType<elemType>* bSearchTreeType<elemType>::searchByISBN(const elemType& searchItem) const { // Search the tree that contains the located IBSN.
-    // Call the helper function searchISBN to search for the located ISBN.
-    return searchISBN(this->root, searchItem);
-}// searchByISBN
-
-template <class elemType>
-nodeType<elemType>* bSearchTreeType<elemType>::searchISBN(nodeType<elemType>* p, const elemType& searchItem) const {
-    if (p == nullptr) // Check if the node is empty.
-        return nullptr;
-
-    // Base Case: Check the current node is equal to the located ISBN.
-    if (p->ISBN == searchItem)
-        return p;
-
-    // Base Case: Traverse the left substree
-    nodeType<elemType>* leftNode = searchISBN(p->lLink, searchItem);
-    if (leftNode != nullptr)
-        return leftNode;
-
-    // Recursive Case: Traverse the right substree
-    return searchISBN(p->rLink, searchItem);
-}//end searchISBN
 
 template <class elemType>
 void bSearchTreeType<elemType>::printByTitle(const elemType& searchItem, int& count) { // Prints book(s) under the same title in the inventory.
@@ -262,23 +239,40 @@ void bSearchTreeType<elemType>::printGenre(nodeType<elemType>* p, const elemType
 }
 
 template <class elemType>
+nodeType<elemType>* bSearchTreeType<elemType>::searchByISBN(const elemType& searchItem) const { // Search the tree that contains the located IBSN.
+    // Call the helper function searchISBN to search for the located ISBN.
+    return searchISBN(this->root, searchItem);
+}// searchByISBN
+
+template <class elemType>
+nodeType<elemType>* bSearchTreeType<elemType>::searchISBN(nodeType<elemType>* p, const elemType& searchItem) const {
+    if (p == nullptr) // Check if the node is empty.
+        return nullptr;
+
+    // Base Case: Check the current node is equal to the located ISBN.
+    if (p->ISBN == searchItem)
+        return p;
+
+    // Base Case: Traverse the left substree
+    nodeType<elemType>* leftNode = searchISBN(p->lLink, searchItem);
+    if (leftNode != nullptr)
+        return leftNode;
+
+    // Recursive Case: Traverse the right substree
+    return searchISBN(p->rLink, searchItem);
+}//end searchISBN
+
+template <class elemType>
 void bSearchTreeType<elemType>::addBook() {
-    int userNum = 0;            // Input integer from the user
-    string userString[4];       // Input strings from the user
+    // userString[0] = title, userString[1] = author, userString[2] = genre, userString[3] = ISBN, userNum = quantity
+    int userNum = 0;         
+    string userString[4];       
 
     // Get input from the user
     this->setInfo(userString[0], userString[1], userString[2], userString[3], userNum);
 
-    // Ensure the book is within the tree to confirm with the user
-
     // Create a new node from the user input
     insert(userString[0], userString[1], userString[2], userString[3], userNum);
-
-    nodeType<elemType>* specificBook = searchByISBN(userString[3]);
-
-    if (specificBook != nullptr) {
-        cout << "Book added!" << endl;
-    }
 }
 
 template <typename T>
