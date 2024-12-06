@@ -100,9 +100,9 @@ int main() {
 						cin.ignore();
 						getline(cin, userString[0]); // Store the title of the Book into index 0 of userString
 
-						bookInv.printByTitle(userString[0], count); // Search and print for book(s) under the same title.
+						specificBook = bookInv.searchByTitle(userString[0]); // Search and print for book(s) under the same title.
 
-						bookInv.isBookFound(userString[0], userInt, count); // Check how many books under the same title.
+						bookInv.findBook(bookInv, specificBook); // Check how many books under the same title.
 
 						break;
 					case 2: // Searching through Author
