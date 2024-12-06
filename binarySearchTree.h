@@ -22,8 +22,8 @@ public:
     nodeType<elemType>* searchByISBN(const elemType& searchItem) const;
     // A function to search for a book through the book's ISBN.
 
-    void printByTitle(const elemType& searchItem, int& count);
-    // Prints book(s) under the same title in the inventory.
+    nodeType<elemType>* searchByTitle(const elemType& searchItem);
+    // Finds a book under the searchItem title in the inventory.
 
     void printByAuthor(const elemType& searchItem, int& count);
     // Prints book(s) under the same author in the inventory.
@@ -54,8 +54,8 @@ public:
 
 private:
 
-    void printTitle(nodeType<elemType>* p, const elemType& searchItem, int& count);
-    // A helper function to support the printByTitle function.
+    nodeType<elemType>* searchTitle(nodeType<elemType>* p, const elemType& searchItem);
+    // A helper function to support the searchByTitle function.
 
     void printAuthor(nodeType<elemType>* p, const elemType& searchItem, int& count);
     // A helper function to print books under the same author in the printByAuthor function.
@@ -149,34 +149,28 @@ void bSearchTreeType<elemType>::isBookFound(const elemType& searchItem, const in
 }
 
 template <class elemType>
-void bSearchTreeType<elemType>::printByTitle(const elemType& searchItem, int& count) { // Prints book(s) under the same title in the inventory.
-    count = 0; // Set count to 0.
-
-    // Call the helper function printTitle
-    printTitle(this->root, searchItem, count);
+nodeType<elemType>* bSearchTreeType<elemType>::searchByTitle(const elemType& searchItem) { // Search the tree that contains the located Title.
+    // Call the helper function searchTitle to search for the located Title.
+    return searchTitle(this->root, searchItem);
 }
 
 template <class elemType>
-void bSearchTreeType<elemType>::printTitle(nodeType<elemType>* p, const elemType& searchItem, int& count) {
-    bSearchTreeType<elemType> books;
+nodeType<elemType>* bSearchTreeType<elemType>::searchTitle(nodeType<elemType>* p, const elemType& searchItem) {
+    if (p == nullptr) // Check if the node is empty.
+        return nullptr;
 
-    // Check if the node is empty.
-    if (p != nullptr) {
-        // Traverse the left subtree.
-        printTitle(p->lLink, searchItem, count);
+    // Base Case: Check the current node is equal to the located ISBN.
+    if (p->info == searchItem)
+        return p;
 
-        // If the book's title is equal to searchItem, print out that book.
-        if (p->info == searchItem) {
-            cout << "Book Found!" << endl << "=================" << endl;
-            books.printBook(p);
-            cout << endl;
-            count++; // Increment count by 1.
-        }
-
-        // Traverse the right substree.
-        printTitle(p->rLink, searchItem, count);
+    if (checkLesser(p->info, searchItem)) {
+        return searchTitle(p->lLink, searchItem);
     }
-}
+    else {
+        return searchTitle(p->rLink, searchItem);
+    }
+
+}//end searchTitle
 
 template <class elemType>
 void bSearchTreeType<elemType>::printByAuthor(const elemType& searchItem, int& count) { // Prints book(s) under the same author in the inventory.
@@ -271,8 +265,13 @@ void bSearchTreeType<elemType>::addBook() {
     // Get input from the user
     this->setInfo(userString[0], userString[1], userString[2], userString[3], userNum);
 
+    if (searchByISBN(userString[3]) != nullptr || searchByTitle(userString[0]) != nullptr) {
+        cout << "This book is already in the inventory!" << endl;
+        return;
+    }
     // Create a new node from the user input
     insert(userString[0], userString[1], userString[2], userString[3], userNum);
+    cout << "Book added!" << endl;
 }
 
 template <typename T>
@@ -340,7 +339,7 @@ nodeType<elemType>* bSearchTreeType<elemType>::insertHelper
 
     // Ensure the book is not already in the inventory
     if (p->ISBN == insertISBN || p->info == insertTitle) {
-        cout << "This book is already in the inventory!" << endl;
+        cout << "ERROR: No Duplicate Books are Allowed" << endl;
         return p;
     }
   
@@ -549,17 +548,20 @@ template <class elemType>
 void bSearchTreeType<elemType>::updateBook(const string& bookISBN) { // A function to update the book's quantity.
     int userNum = 0;            // Input integer from the user
     string userString[4];       // Input strings from the user
-    nodeType<elemType>* specificBook = searchByISBN(bookISBN); // Assign specificBook with a book that contains the same ISBN as bookISBN 
+    nodeType<elemType>* specificBookISBN = searchByISBN(bookISBN); // Assign specificBook with a book that contains the same ISBN as bookISBN 
 
-    if (specificBook != nullptr) { // Check if the book exists or not
+    if (specificBookISBN != nullptr) { // Check if the book exists or not
+
         cout << "Book Found. Please enter new information." << endl;
 
         this->setInfo(userString[0], userString[1], userString[2], userString[3], userNum);
+        
+        // Check if the new ISBN and Title are not copies of already existing ISBN and titles (seperate from the node being updated)
+        if ((searchByISBN(userString[3]) == nullptr || userString[3] == specificBookISBN->ISBN) && 
+            (searchByTitle(userString[0]) == nullptr || userString[0] == specificBookISBN->info)) {
 
-        // Check if the new ISBN is not a copy of an already existing ISBN
-        if (searchByISBN(userString[3]) == nullptr || userString[3] == specificBook->ISBN) {
             // Delete the book specified by the ISBN (Resets the book's sales by default, but sales are still kept in totalSales)
-            deleteNode(specificBook->info);
+            deleteNode(specificBookISBN->info);
 
             // Insert a new book with the new information
             cout << "Book Updated!" << endl;
