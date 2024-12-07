@@ -79,7 +79,7 @@ public:
     //               root = nullptr;
 
     virtual void insert
-    (const string& insertTitle, const string& insertAuthor, const string& insertGenre, const string& insertISBN, const int& insertQuantity) = 0;
+    (const string& insertTitle, const string& insertAuthor, const string& insertGenre, const string& insertISBN, const int& insertQuantity, const int& insertSales) = 0;
     //Function to insert insertItem in the binary tree.
     //Postcondition: If there is no node in the binary tree
     //               that has the same ISBN as insertItem, a

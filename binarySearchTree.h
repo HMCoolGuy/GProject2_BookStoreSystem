@@ -22,8 +22,8 @@ public:
     nodeType<elemType>* searchByISBN(const elemType& searchItem) const;
     // A function to search for a book through the book's ISBN.
 
-    nodeType<elemType>* searchByTitle(const elemType& searchItem);
-    // Finds a book under the searchItem title in the inventory.
+    void printByTitle(const elemType& searchItem, int& count);
+    // Prints book(s) under the same title in the inventory.
 
     void printByAuthor(const elemType& searchItem, int& count);
     // Prints book(s) under the same author in the inventory.
@@ -54,8 +54,8 @@ public:
 
 private:
 
-    nodeType<elemType>* searchTitle(nodeType<elemType>* p, const elemType& searchItem);
-    // A helper function to support the searchByTitle function.
+    void printTitle(nodeType<elemType>* p, const elemType& searchItem, int& count);
+    // A helper function to support the printByTitle function.
 
     void printAuthor(nodeType<elemType>* p, const elemType& searchItem, int& count);
     // A helper function to print books under the same author in the printByAuthor function.
@@ -71,32 +71,13 @@ private:
     // for alphabetical sorting purposes.
 
     void insert
-    (const string& insertTitle, const string& insertAuthor, const string& insertGenre, const string& insertISBN, const int& insertQuantity);
+    (const string& insertTitle, const string& insertAuthor, const string& insertGenre, const string& insertISBN, const int& insertQuantity, const int& insertSales = 0);
     //Function to insert insertItem in the binary search tree.
     //Postcondition: If there is no node in the binary search
     //               tree that has the same info as
     //               insertItem, a node with the info
     //               insertItem is created and inserted in the
     //               binary search tree.
-
-    nodeType<elemType>* insertHelper 
-    (nodeType<elemType>* p, const string& insertTitle, const string& insertAuthor, const string& insertGenre, const string& insertISBN, const int& insertQuantity);
-    // Helper function to insert an item into the tree
-
-    int getHeight(const nodeType<elemType>* p) const;
-    // A function to return the node's height.
-
-    int getBalanceFactor(nodeType<elemType>* p);
-    // A helper function used to return the node's balance factor.
-
-    nodeType<elemType>* rotateRight(nodeType<elemType>* p);
-    // A private function to rotate a current node to the right
-
-    nodeType<elemType>* rotateLeft(nodeType<elemType>* p);
-    // A private function to rotate a current node to the left
-
-    nodeType<elemType>* balanceTree(nodeType<elemType>* p);
-    // A function used to balance the nodes of a binary search tree.
 
     void deleteFromTree(nodeType<elemType>*& p);
     //Function to delete the node to which p points is
@@ -113,7 +94,7 @@ template <class elemType>
 void bSearchTreeType<elemType>::findBook(const bSearchTreeType<elemType>& p, nodeType<elemType>* specificBook) {
     cout << endl;
     if (specificBook == nullptr) {	// Confirm that the book exists
-        cout << "This book is not in inventory." << endl;
+        cout << "This book is not in inventory.";
     }
     else {  // Display the book's information
         cout << "Book Found!" << endl << "=================" << endl;
@@ -144,33 +125,39 @@ void bSearchTreeType<elemType>::isBookFound(const elemType& searchItem, const in
         cout << "There are no book(s) " << searchCategory << " " << searchItem << " in the inventory." << endl;
     }
     else {
-        cout << "There exists " << count << " book(s) " << searchCategory << " " << searchItem << " in the inventory" << endl;
+        cout << "\nThere exists " << count << " book(s) " << searchCategory << " " << searchItem << " in the inventory" << endl;
     }
 }
 
 template <class elemType>
-nodeType<elemType>* bSearchTreeType<elemType>::searchByTitle(const elemType& searchItem) { // Search the tree that contains the located Title.
-    // Call the helper function searchTitle to search for the located Title.
-    return searchTitle(this->root, searchItem);
+void bSearchTreeType<elemType>::printByTitle(const elemType& searchItem, int& count) { // Prints book(s) under the same title in the inventory.
+    count = 0; // Set count to 0.
+
+    // Call the helper function printTitle
+    printTitle(this->root, searchItem, count);
 }
 
 template <class elemType>
-nodeType<elemType>* bSearchTreeType<elemType>::searchTitle(nodeType<elemType>* p, const elemType& searchItem) {
-    if (p == nullptr) // Check if the node is empty.
-        return nullptr;
+void bSearchTreeType<elemType>::printTitle(nodeType<elemType>* p, const elemType& searchItem, int& count) {
+    bSearchTreeType<elemType> books;
 
-    // Base Case: Check the current node is equal to the located ISBN.
-    if (p->info == searchItem)
-        return p;
+    // Check if the node is empty.
+    if (p != nullptr) {
+        // Traverse the left subtree.
+        printTitle(p->lLink, searchItem, count);
 
-    if (checkLesser(p->info, searchItem)) {
-        return searchTitle(p->lLink, searchItem);
+        // If the book's title is equal to searchItem, print out that book.
+        if (p->info == searchItem) {
+            if (count < 1)
+                cout << "Book(s) Found!" << endl << "=================" << endl;
+            books.printBook(p);
+            count++; // Increment count by 1.
+        }
+
+        // Traverse the right substree.
+        printTitle(p->rLink, searchItem, count);
     }
-    else {
-        return searchTitle(p->rLink, searchItem);
-    }
-
-}//end searchTitle
+}
 
 template <class elemType>
 void bSearchTreeType<elemType>::printByAuthor(const elemType& searchItem, int& count) { // Prints book(s) under the same author in the inventory.
@@ -191,9 +178,9 @@ void bSearchTreeType<elemType>::printAuthor(nodeType<elemType>* p, const elemTyp
 
         // If the book's author is equal to searchItem, print out that book.
         if (p->author == searchItem) {
-            cout << "Book Found!" << endl << "=================" << endl;
+            if (count < 1)
+                cout << "Book(s) Found!" << endl << "=================" << endl;
             books.printBook(p);
-            cout << endl;
             count++; // Increment count by 1.
         }
 
@@ -221,9 +208,9 @@ void bSearchTreeType<elemType>::printGenre(nodeType<elemType>* p, const elemType
 
         // If the book's genre is equal to searchItem, print out that book.
         if (p->genre == searchItem) {
-            cout << "Book Found!" << endl << "=================" << endl;
+            if (count < 1)
+                cout << "Book(s) Found!" << endl << "=================" << endl;
             books.printBook(p);
-            cout << endl;
             count++; // Increment count by 1.
         }
 
@@ -265,7 +252,7 @@ void bSearchTreeType<elemType>::addBook() {
     // Get input from the user
     this->setInfo(userString[0], userString[1], userString[2], userString[3], userNum);
 
-    if (searchByISBN(userString[3]) != nullptr || searchByTitle(userString[0]) != nullptr) {
+    if (searchByISBN(userString[3]) != nullptr) {
         cout << "This book is already in the inventory!" << endl;
         return;
     }
@@ -310,138 +297,67 @@ bool bSearchTreeType<T>::checkLesser(string str1, string str2) {
 
 template <class elemType>
 void bSearchTreeType<elemType>::insert
-(const string& insertTitle, const string& insertAuthor, const string& insertGenre, const string& insertISBN, const int& insertQuantity)
+(const string& insertTitle, const string& insertAuthor, const string& insertGenre, const string& insertISBN, const int& insertQuantity, const int& insertSales)
 {
-    this->root = insertHelper(this->root, insertTitle, insertAuthor, insertGenre, insertISBN, insertQuantity);
-}
+    nodeType<elemType>* current; //pointer to traverse the tree
+    nodeType<elemType>* trailCurrent = nullptr; //pointer
+    //behind current
+    nodeType<elemType>* newNode;  //pointer to create the node
 
-template <class elemType>
-nodeType<elemType>* bSearchTreeType<elemType>::insertHelper
-(nodeType<elemType>* p, const string& insertTitle, const string& insertAuthor, const string& insertGenre, const string& insertISBN, const int& insertQuantity)
-{
-    
-    // Base Case (if the current node being pointed at is nllptr, either the root or at the end of a path)
-    if (p == nullptr) {
-        // Create the new node
-        nodeType<elemType>* newNode = new nodeType<elemType>;
+    newNode = new nodeType<elemType>;
 
-        newNode->info = insertTitle;     // Set the new book's title
-        newNode->author = insertAuthor; // Set the new book's author
-        newNode->genre = insertGenre;   // Set the new book's genre
-        newNode->ISBN = insertISBN;     // Set the new book's ISBN
-        newNode->quantity = insertQuantity; // Set the quantity of this book
-        newNode->lLink = nullptr;
-        newNode->rLink = nullptr;
 
-        // Return the new node
-        return newNode;
+    // Setup the information for the book
+    newNode->info = insertTitle;     // Set the new book's title
+    newNode->author = insertAuthor; // Set the new book's author
+    newNode->genre = insertGenre;   // Set the new book's genre
+    newNode->ISBN = insertISBN;     // Set the new book's ISBN
+    newNode->quantity = insertQuantity; // Set the quantity of this book
+    newNode->sales = insertSales;   // Set the sales amount of the book (by default is 0)
+    newNode->lLink = nullptr;
+    newNode->rLink = nullptr;
+
+    // Node is sorted alphabetically (Where A has highest root priority, and z is lowest priority)
+    if (this->root == nullptr)
+        this->root = newNode;
+    else
+    {
+        current = this->root;
+
+        while (current != nullptr)
+        {
+            trailCurrent = current;
+
+            if (current->ISBN == insertISBN) // ISBN's are compared to make sure no duplicate books are added
+            {
+                cout << "This book is already in the inventory!" << endl;
+                return;
+            }
+
+            // Iterate through each character of both the string to determine order
+            if (checkLesser(current->info, insertTitle)) {
+                // If mismatching insert character is lesser than current string character
+                current = current->lLink;
+            }
+            else {
+                // If mismatching insert character is greater than current string character
+                current = current->rLink;
+            }
+        }//end while
+
+        // Determine which direction the previous node should point to for the new node
+        if (checkLesser(trailCurrent->info, insertTitle)) {
+            // If character of insert string goes before previous string's character, point lLink of previous node to the new node
+            trailCurrent->lLink = newNode;
+        }
+        else {
+            // If character of insert string goes after previous string's character, point rLink of previous node to the new node
+            trailCurrent->rLink = newNode;
+        }
     }
-
-    // Ensure the book is not already in the inventory
-    if (p->ISBN == insertISBN || p->info == insertTitle) {
-        cout << "ERROR: No Duplicate Books are Allowed" << endl;
-        return p;
-    }
-  
-    // Determine where to put the newNode
-    if (checkLesser(p->info, insertTitle)) {
-        // If the title goes alphabetically before the current node's title, go to the lLink
-        p->lLink = insertHelper(p->lLink, insertTitle, insertAuthor, insertGenre, insertISBN, insertQuantity);
-    }
-    else {
-        // If the title goes alphabetically after the current node's title, go to the rLink
-        p->rLink = insertHelper(p->rLink, insertTitle, insertAuthor, insertGenre, insertISBN, insertQuantity);
-    }
-
-    // Make sure that each node's balance factor is correct, and that the tree is balanced
-    return balanceTree(p);
 
 }//end insert
 
-template <class elemType>
-int bSearchTreeType<elemType>::getHeight(const nodeType<elemType>* p) const { // returns the node's height.
-    // Check if the node is empty first.
-    if (p == nullptr)
-        return -1;
-
-    return p->height;
-}
-
-template <class elemType>
-int bSearchTreeType<elemType>::getBalanceFactor(nodeType<elemType>* p) { // Returns the node's balance factor.
-    // Check if the node is empty.
-    if (p == nullptr) {
-        return 0;
-    }
-
-    return (getHeight(p->lLink) - getHeight(p->rLink));
-}
-
-template <class elemType>
-nodeType<elemType>* bSearchTreeType<elemType>::rotateRight(nodeType<elemType>* p) {
-    nodeType<elemType>* leftNode = p->lLink;                // Node that will become the new parent
-    nodeType<elemType>* childRightNode = leftNode->rLink;   // Node that will become the new lLink of leftNode (if it exists)
-
-    // Rotate the nodes
-    leftNode->rLink = p;        // Set the left node's (the new parent) rLink to point to p (the previous parent)
-    p->lLink = childRightNode;  // Set the rLink of the leftNode to become the lLink of the leftNode (if it exists)
-
-    // Update height for each node
-    p->height = 1 + max(getHeight(p->lLink), getHeight(p->rLink));  // Determine the height of the rLink of leftNode
-    leftNode->height = 1 + max(getHeight(leftNode->lLink), getHeight(leftNode->rLink)); // determine the height of leftNode
-
-    return leftNode;    // Return the new parent, leftNode
-}
-
-template <class elemType>
-nodeType<elemType>* bSearchTreeType<elemType>::rotateLeft(nodeType<elemType>* p) {
-    nodeType<elemType>* rightNode = p->rLink;   // Node that will become the new parent 
-    nodeType<elemType>* childLeftNode = rightNode->lLink;   // Node that will become the new lLink of leftNode (if it exists)
-
-    // Rotate the nodes
-    rightNode->lLink = p;       // Set the right node's (new parent) lLink to point to p (previous parent)
-    p->rLink = childLeftNode;   // Set the lLink of the rightNode to become the rLink of the rightNode (if it exists)
-
-    // Update height for each node
-    p->height = 1 + max(getHeight(p->lLink), getHeight(p->rLink));  // Determine the height of the lLink of rightNode
-    rightNode->height = 1 + max(getHeight(rightNode->lLink), getHeight(rightNode->rLink));  // determine the height of rightNode
-
-    return rightNode;       // Return the new parent, rightNode
-}
-
-template <class elemType>
-nodeType<elemType>* bSearchTreeType<elemType>::balanceTree(nodeType<elemType>* p) { // A function used to balance the nodes of a binary search tree.
-    if (p == nullptr) {    // Base case
-        return p;
-    }
-
-    // Set the height of the current node to be the maximum of the heights of either lLink or rLink
-    p->height = 1 + max(getHeight(p->lLink), getHeight(p->rLink));
-
-    // Determine the balancing factor of the current node
-    int balanceFactor = getBalanceFactor(p);
-
-    // If the balanceFactor is greater than 1, perform a right rotation.
-    if (balanceFactor > 1) {
-        // Perform a left-right rotation if the node's left subtree's balanceFactor is less than 0.
-        if (getBalanceFactor(p->lLink) < 0) {
-            p->lLink = rotateLeft(p->lLink);
-
-        }
-        return rotateRight(p);
-    }
-
-    // If the balanceFactor is less than -1, perform a left rotation.
-    else if (balanceFactor < -1) {
-        // Perform a right-left rotation if the node's right subtree's balanceFactor is greater than 0.
-        if (getBalanceFactor(p->rLink) > 0) {
-            p->rLink = rotateRight(p->rLink);
-        }
-        return rotateLeft(p);
-    }
-
-    return p;
-}
 
 template <class elemType>
 void bSearchTreeType<elemType>::deleteNode
@@ -548,24 +464,28 @@ template <class elemType>
 void bSearchTreeType<elemType>::updateBook(const string& bookISBN) { // A function to update the book's quantity.
     int userNum = 0;            // Input integer from the user
     string userString[4];       // Input strings from the user
-    nodeType<elemType>* specificBookISBN = searchByISBN(bookISBN); // Assign specificBook with a book that contains the same ISBN as bookISBN 
+    nodeType<elemType>* specificBook = searchByISBN(bookISBN); // Assign specificBook with a book that contains the same ISBN as bookISBN 
 
-    if (specificBookISBN != nullptr) { // Check if the book exists or not
+    if (specificBook != nullptr) { // Check if the book exists or not
 
         cout << "Book Found. Please enter new information." << endl;
 
         this->setInfo(userString[0], userString[1], userString[2], userString[3], userNum);
         
         // Check if the new ISBN and Title are not copies of already existing ISBN and titles (seperate from the node being updated)
-        if ((searchByISBN(userString[3]) == nullptr || userString[3] == specificBookISBN->ISBN) && 
-            (searchByTitle(userString[0]) == nullptr || userString[0] == specificBookISBN->info)) {
+        if ((searchByISBN(userString[3]) == nullptr || userString[3] == specificBook->ISBN)) {
+            // Only resets the amount of sales for that book if the ISBN changes
+            int oldSales = 0;
+            if (userString[3] == specificBook->ISBN) {
+                oldSales = specificBook->sales;
+            }
 
-            // Delete the book specified by the ISBN (Resets the book's sales by default, but sales are still kept in totalSales)
-            deleteNode(specificBookISBN->info);
+            // Delete the book specified by the ISBN (Resets the book's sales if ISBN changes)
+            deleteNode(specificBook->info);
 
             // Insert a new book with the new information
             cout << "Book Updated!" << endl;
-            insert(userString[0], userString[1], userString[2], userString[3], userNum);
+            insert(userString[0], userString[1], userString[2], userString[3], userNum, oldSales);
         }
         else {
             cout << "This book is already in the inventory!" << endl;

@@ -61,7 +61,6 @@ int main() {
 			else {
 				cout << "CURRENT INVENTORY" << endl << "=================" << endl;
 				bookInv.displayInventory();
-				bookInv.preorderTraversal();
 				
 				cout << endl;
 			}
@@ -100,9 +99,10 @@ int main() {
 						cin.ignore();
 						getline(cin, userString[0]); // Store the title of the Book into index 0 of userString
 
-						specificBook = bookInv.searchByTitle(userString[0]); // Search and print for book(s) under the same title.
+						cout << endl;
+						bookInv.printByTitle(userString[0], count); // Search and print for book(s) under the same title.
 
-						bookInv.findBook(bookInv, specificBook); // Check how many books under the same title.
+						bookInv.isBookFound(userString[0], userInt, count); // Check how many books under the same title.
 
 						break;
 					case 2: // Searching through Author
@@ -110,6 +110,7 @@ int main() {
 						cin.ignore();
 						getline(cin, userString[1]); // Store the Author of the book into index 1 of userString
 				
+						cout << endl;
 						bookInv.printByAuthor(userString[1], count); // Search and print for book(s) under the same author(s).
 
 						bookInv.isBookFound(userString[1], userInt, count); // Check how many books under the same author(s).
@@ -120,6 +121,7 @@ int main() {
 						cin.ignore();
 						getline(cin, userString[2]); // Store the Genre into index 2 of userString
 
+						cout << endl;
 						bookInv.printByGenre(userString[2], count); // Search and print for book(s) under the same genre.
 
 						bookInv.isBookFound(userString[2], userInt, count); // Check how many books under the same genre.
