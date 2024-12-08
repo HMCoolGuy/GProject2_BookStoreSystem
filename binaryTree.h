@@ -99,25 +99,6 @@ public:
     // Function to print a given book node's information
     // (Title, Author, Genre, ISBN, and Quantity).
 
-    void setInfo
-    (string& userTitle, string& userAuthor, string& userGenre, string& userISBN, int& userNum);
-    // A function to get a new title, author, genre, ISBN, and quantity from the user
-
-    void addToHistory(nodeType<elemType> p);
-    // Function to add a book to the order history
-
-    void displayHistory();
-    // Function to display the order history
-
-    int getBookTotal() const;
-    // Function to return the total amount of books within the inventory
-
-    void incrementAllTotalSales();
-    // Function to increment the total sales
-
-    int getAllSalesTotal() const;
-    // Function to return the total amount of sales made
-
     binaryTreeType(const binaryTreeType<elemType>& otherTree);
     //Copy constructor
 
@@ -131,8 +112,6 @@ protected:
     nodeType<elemType>* root;
 
 private:
-    vector<nodeType<elemType>> orderHistory;      // Vector for keeping track of orders
-    int totalSales = 0; // Keeps track of total sales made
 
     void copyTree(nodeType<elemType>*& copiedTreeRoot,
         nodeType<elemType>* otherTreeRoot);
@@ -189,9 +168,6 @@ private:
     //the binary tree to which p points 
     //Postcondition: The number of leaves in the binary 
     //               tree to which p points is returned.
-
-    int traverseBookTotal(nodeType<elemType>* p) const;
-    // Helper function of getBookTotal that returns a running count of all book quantities.
 
 };
 
@@ -413,88 +389,6 @@ void binaryTreeType<elemType>::printBook(nodeType<elemType>* p) const {
     cout << "Quantity: " << p->quantity << " | ";
     // Print the quantity of the book
     cout << "Sales: " << p->sales << endl;
-}
-
-template <class elemType>
-void binaryTreeType<elemType>::setInfo // Function that gets new book info from the user
-(string& userTitle, string& userAuthor, string& userGenre, string& userISBN, int& userNum) {
-
-    cout << "Enter Title of Book: ";
-    getline(cin, userTitle); // Store the title within index 0 of userString
-
-    cout << "Enter Book Author: ";
-    getline(cin, userAuthor); // Store the author within index 1 of userString
-
-    cout << "Enter Book Genre: ";
-    getline(cin, userGenre); // Store the genre within index 2 of userString
-
-    cout << "Enter Book's ISBN: ";
-    getline(cin, userISBN); // Store the ISBN within index 3 of userString
-
-    while (userISBN.length() != 10 && userISBN.length() != 13) { // Check if the length of the ISBN is valid.
-        // Call the helper function searchByISBN
-        cout << "ERROR: Invalid ISBN (Must be 10 or 13 characters)" << endl;
-        cout << "Enter Book's ISBN: ";
-        getline(cin, userISBN); // Store the ISBN within index 3 of userString
-    }
-
-    cout << "Enter Book Quantity: ";
-    cin >> userNum;				 // Store the quantity of the book within userString
-
-    // Ensure that the capacity is valid
-    while (userNum < 0) {
-        cout << "ERROR: Invalid Quantity (Must be a positive integer)" << endl;
-        cout << "Enter Book Quantity: ";
-        cin.ignore();
-        cin >> userNum;				 // Store the quantity of the book within userString
-    }
-}
-
-template<class elemType>
-void binaryTreeType<elemType>::addToHistory(nodeType<elemType> p) {
-    orderHistory.push_back(p); // Add a book's info (its info before it is ordered) to the orderHistory
-}
-
-template<class elemType>
-void binaryTreeType<elemType>::displayHistory() {
-
-    // Check if any orders have been places
-    if (orderHistory.size() == 0) {
-        cout << "No orders have been placed yet.";
-    }
-    else {
-        // Traverse the list from most to least recent orders
-        for (int i = (orderHistory.size() - 1); i >= 0; i--) {
-            this->printBook(&orderHistory.at(i));
-        }
-    }
-
-    cout << "\n\n";
-}
-
-// Function that returns the total amount of books within the inventory
-template<class elemType>
-int binaryTreeType<elemType>::getBookTotal() const {
-    return traverseBookTotal(this->root); // Use recursive helper function to traverse the list for each quantity
-}
-
-template<class elemType>
-int binaryTreeType<elemType>::traverseBookTotal(nodeType<elemType>* p) const { // Helper function
-    if (p == nullptr) { // Base case
-        return 0;
-    }
-    // Traverse the list and return the total sum of each quantity
-    return p->quantity + traverseBookTotal(p->lLink) + traverseBookTotal(p->rLink);
-}
-
-template<class elemType>
-void binaryTreeType<elemType>::incrementAllTotalSales() {
-    totalSales++; // Increment all total sales by 1
-}
-
-template<class elemType>
-int binaryTreeType<elemType>::getAllSalesTotal() const {
-    return totalSales;
 }
 
 #endif
